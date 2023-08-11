@@ -1,0 +1,99 @@
+// Attributes
+:walkthrough: Connecting applications across clouds with Skupper
+:title: Lab 4 - {walkthrough}
+:user-password: openshift
+:azure-password: azure
+:standard-fail-text: Verify that you followed all the steps. If you continue to have issues, contact a workshop assistant.
+:namespace: {user-username}
+:frontend-namespace: {user-username}-patient-front
+:backend-namespace: {user-username}-patient-back
+:rhosak: Red Hat OpenShift Streams for Apache Kafka
+:rhoas: Red Hat OpenShift Application Services
+:cloud-console: https://console.redhat.com
+:codeready-project: FleurDeLune
+
+// URLs
+:openshift-streams-url: https://console.redhat.com/beta/application-services/streams/kafkas
+:next-lab-url: https://tutorial-web-app-webapp.{openshift-app-host}/tutorial/dayinthelife-streaming.git-labs-02-/
+:codeready-url: https://devspaces.{openshift-app-host}/
+:openshift-console: http://console-openshift-console.{openshift-app-host}/
+
+[id='service-interconnect']
+= Connect your services across different environments with Red Hat Service Interconnect
+
+In this lab you discover how to build a service network to connect disparate services across different environments using Red Hat Service Interconnect.
+
+## Modernizing MediCorp's Legacy Patient Portal
+ Let's delve into the world of MediCorp, a healthcare organization offering a comprehensive portal for both doctors and patients. This portal facilitates various tasks for patients, including bill payments and appointment checks.
+
+Presently, the patient portal is a monolithic application, which has been causing significant collaboration challenges between the front-end and back-end teams. Furthermore, it struggles to maintain efficiency and scalability during peak hours, resulting in sluggish performance and increased expenses.
+
+In response, MediCorp has made the strategic decision to revamp their application, transitioning it into a set of microservices. These microservices will be distributed across different environments, enhancing scalability and overall performance.
+
+Outlined below are the key challenges and questions that arose during this transformation process:
+
+**Seamless Transition**: The modernization process is not an instantaneous change, requiring time and careful implementation. However, it's imperative that our existing application continues to function smoothly during this transition period.
+
+**Integration of Old and New**: The integration of the "old" and the new microservices presents its own set of complexities. What happens when certain components cannot be migrated to containers and must remain in the current datacenter?
+
+**Hybrid Cloud Possibilities**: Exploring the potential of a hybrid cloud approach with multiple service providers adds another layer of consideration to the modernization journey.
+
+Join us in this lab as we take you through MediCorp's transformational journey. Discover how they harnessed the power of Red Hat Service Interconnect as a pivotal component of their modernization strategy, effectively tackling the challenges mentioned above and more.
+
+
+## What is Red Hat Service Interconnect?
+Red Hat Service Interconnect enables application and service connectivity across different environments through layer 7 addressing and routing. Using a simple command line interface, interconnections are created in a matter of minutes, avoiding extensive networking planning, and overhead. All interconnections between environments use mutual TLS(mTLS) to keep your organization’s infrastructure and data protected. Red Hat Service Interconnect is based on the open source Skupper project.
+
+[type=walkthroughResource]
+.AWS OpenShift Links
+****
+* link:{openshift-host}/terminal[AWS Terminal Console, window="_blank", , id="resources-codeready-url"]
+* link:{openshift-host}/topology/ns/{namespace}[AWS Developer Console, window="_blank"]
+****
+[type=walkthroughResource]
+.AWS Credentials
+****
+* *username:* `{user-username}`
+* *password:* `{user-password}`
+****
+[type=walkthroughResource]
+.Azure OpenShift Links
+****
+* link:{azure-console}/terminal[Azure Terminal Console, window="_blank", , id="resources-codeready-url"]
+* link:https://{{ ocp4_workload_service_interconnect_azure_console_hostname }}/topology/ns/{namespace}[Azure Developer Console, window="_blank"]
+****
+[type=walkthroughResource]
+.Azure Credentials
+****
+* *username:* `{user-username}`
+* *password:* `{user-password}`
+****
+
+[time=2]
+[id="creating-connections"]
+== Scenario 1 - Connecting the frontend deployed on OpenShift in AWS to the database and payment processor deployed in the data centre. 
+
+Addressing the biggest issue first, MediCorp separated the Frontend from the Payment Processor Backend, allowing for more flexibility, independent deployment and scalability.
+Given the tight coupling between JSF and the backend, MediCorp decided to re-implement the frontend as a lightweight Python application.
+Both application components are still running in VMs in the data center.
+
+To leverage scalability and resilience for the frontend, MediCorp wants to move the Frontend to OpenShift on AWS, while the payment processor and database remain in the data center, mainly because there are regulatory requirements that require data processing or storage to happen on-prem or in specifically certified data centres.
+
+The following steps will showcase how you can connect the frontend to services(database and payment-processor) in the datacentre using Red Hat Service Interconnect. Note that none of these services are exposed to the public internet
+
+
+. Open the console of the OpenShift cluster on AWS link:{openshift-host}/topology/ns/{namespace}[AWS Developer Console, window="_blank"]
+
+. Copy and paste the following URL. 
++
+[source,bash,subs="attributes+"]
+----
+curl {istio-ingress}/api/v1/products
+----
+
+. Click the *Run* button.
+
+. The page will load the response information from the service. You will be able to see the _RESPONSE HEADERS_ and the actual _RESPONSE_BODY_. You should expect a _*_HTTP 200_ response and the response JSON as follows:
++
+image::images/online-curl-response.png[online-curl-response, role="integr8ly-img-responsive"]
+
