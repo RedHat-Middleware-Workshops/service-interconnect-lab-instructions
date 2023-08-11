@@ -1,6 +1,6 @@
 // Attributes
 :walkthrough: Connecting applications across clouds with Skupper
-:title: Lab 4 - {walkthrough}
+:title: Lab 1 - {walkthrough}
 :user-password: openshift
 :azure-password: azure
 :standard-fail-text: Verify that you followed all the steps. If you continue to have issues, contact a workshop assistant.
@@ -23,8 +23,9 @@
 
 In this lab you discover how to build a service network to connect disparate services across different environments using Red Hat Service Interconnect.
 
-## Modernizing MediCorp's Legacy Patient Portal
- Let's delve into the world of MediCorp, a healthcare organization offering a comprehensive portal for both doctors and patients. This portal facilitates various tasks for patients, including bill payments and appointment checks.
+## Modernizing MediCorps Legacy Patient Portal
+
+Let us delve into the world of MediCorp, a healthcare organization offering a comprehensive portal for both doctors and patients. This portal facilitates various tasks for patients, including bill payments and appointment checks.
 
 Presently, the patient portal is a monolithic application, which has been causing significant collaboration challenges between the front-end and back-end teams. Furthermore, it struggles to maintain efficiency and scalability during peak hours, resulting in sluggish performance and increased expenses.
 
