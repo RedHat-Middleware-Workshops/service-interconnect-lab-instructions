@@ -238,14 +238,10 @@ To create a link between the environments, you create a token on one of the envi
 +
 image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the aws namespace
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project aws` command to log back into the aws namespace
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project aws
-----
+
 
 
 . Issue the following command
@@ -330,14 +326,10 @@ skupper expose host host.containers.internal --address payment-processor --port 
 +
 image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the `aws` namespace
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project aws` command to log back into the aws namespace
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project aws
-----
+
  
 
 . Create proxy services that will redirect to the services running on the RHEL datacentre
@@ -454,14 +446,10 @@ Since we have already initialized the Service Interconnect router in the aws nam
 image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 +
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the aws namespace
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project aws` command to log back into the aws namespace
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project aws
-----
+
 
 . Issue the following command
 +
@@ -513,14 +501,10 @@ The next step is creating the link on the Azure cluster with the token.
 +
 image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the azure namespace
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project azure` command to log back into the azure namespace
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project azure
-----
+
 
 
 . Create a new file on the Azure cluster where you will paste the token you just generated on the AWS cluster.
@@ -635,14 +619,10 @@ Since we have already initialized the Service Interconnect router in the azure n
 +
 image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the azure namespace
+
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the `oc project azure` command to log back into the azure namespace
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project azure
-----
 
 . Issue the following command
 +
@@ -714,18 +694,7 @@ Site configured to link to skupper-inter-router-azure.apps.azure-7vb2h-1.7vb2h-1
 Check the status of the link using 'skupper link status'.
 ----
 
-. Navigate to the the Azure terminal
-+
-image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the azure namespace
-+
-image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project azure
-----
 
 
 === Deleting the direct link between RHEL Datacentre and Azure cluster
@@ -735,14 +704,10 @@ We have now established a direct link between the Datacentre and Azure cluster. 
 +
 image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
-. If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the below commands to log back into the azure namespace
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project azure` command to log back into the azure namespace
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-+
-[source,bash,role=copy]
-----
-oc project azure
-----
+
 
 . Delete the direct link between AWS and Azure
 +
@@ -785,6 +750,9 @@ image::images/malone-azure.png[malone-azure, role="integr8ly-img-responsive"]
 This indicates that though the direct link is broken the patient portal in AWS is able to reach the payment-processor in Azure
 
 image::images/alt_route_arch.png[alt_route_arch, role="integr8ly-img-responsive"]
+
+
+
 
 
 
