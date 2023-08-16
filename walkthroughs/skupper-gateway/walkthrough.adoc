@@ -12,7 +12,7 @@
 :cloud-console: https://console.redhat.com
 :codeready-project: FleurDeLune
 :aws-password: {aws-password}
-:aws-password2: {aws-password}
+:aws-password2: {{aws-password}}
 :aws-password3: {{ aws_a_provision_data.openshift_cluster_admin_username }}
 
 
