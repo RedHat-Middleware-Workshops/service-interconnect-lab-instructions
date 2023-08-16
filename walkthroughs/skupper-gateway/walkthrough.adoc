@@ -81,7 +81,9 @@ Red Hat Service Interconnect enables application and service connectivity across
 +
 {user-password}
 +
-{azure-console}
+{ aws_route_subdomain }
++
+{ azure_route_subdomain }
 
 [time=10]
 [id="creating-connections"]
