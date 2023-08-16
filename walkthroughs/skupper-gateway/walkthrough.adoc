@@ -74,6 +74,8 @@ Red Hat Service Interconnect enables application and service connectivity across
 * *password:* `{user-password}`
 ****
 
+{aws_route_subdomain}
+
 [time=10]
 [id="creating-connections"]
 == Scenario 1 - Connecting the frontend deployed on OpenShift in AWS to the database and payment processor deployed in the data centre. 
