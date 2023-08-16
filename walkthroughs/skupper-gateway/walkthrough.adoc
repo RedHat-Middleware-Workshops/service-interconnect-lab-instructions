@@ -73,8 +73,11 @@ Red Hat Service Interconnect enables application and service connectivity across
 * *username:* `{user-username}`
 * *password:* `{user-password}`
 ****
-
-{aws_route_subdomain}
+{openshift-host}
++
+{{openshift-host}}
++
+{{aws_route_subdomain}}
 
 [time=10]
 [id="creating-connections"]
