@@ -79,7 +79,7 @@ Red Hat Service Interconnect enables application and service connectivity across
 +
 {user-username}
 +
-{frontend-namespace}
+{user-password}
 
 [time=10]
 [id="creating-connections"]
