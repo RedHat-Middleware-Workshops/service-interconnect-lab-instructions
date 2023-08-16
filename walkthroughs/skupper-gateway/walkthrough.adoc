@@ -11,6 +11,10 @@
 :rhoas: Red Hat OpenShift Application Services
 :cloud-console: https://console.redhat.com
 :codeready-project: FleurDeLune
+:aws-password: {aws-password}
+:aws-password2: {aws-password}
+:aws-password3: {{ aws_a_provision_data.openshift_cluster_admin_username }}
+
 
 // URLs
 :openshift-streams-url: https://console.redhat.com/beta/application-services/streams/kafkas
@@ -56,11 +60,13 @@ Red Hat Service Interconnect enables application and service connectivity across
 ****
 * *username:* `{user-username}`
 * *password:* `{user-password}`
-{aws-admin}
 {aws-password}
-{aws-subdomain}
-{OPENSHIFT_HOST}
-{aws_route_subdomain}
+{{aws-password}}
+{{aws-password2}}
+{aws-password2}
+
+
+
 ****
 [type=walkthroughResource]
 .Azure OpenShift Links
