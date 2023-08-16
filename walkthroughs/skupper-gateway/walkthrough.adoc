@@ -64,6 +64,9 @@ Red Hat Service Interconnect enables application and service connectivity across
 {{aws-password}}
 {{aws-password2}}
 {aws-password2}
+{{aws-password3}}
+{aws-password3}
+
 
 
 
