@@ -80,6 +80,8 @@ Red Hat Service Interconnect enables application and service connectivity across
 {user-username}
 +
 {user-password}
++
+{azure-console}
 
 [time=10]
 [id="creating-connections"]
