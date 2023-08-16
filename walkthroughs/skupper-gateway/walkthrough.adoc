@@ -77,10 +77,9 @@ Red Hat Service Interconnect enables application and service connectivity across
 +
 {{openshift-host}}
 +
-{{aws_route_subdomain}}
+{user-username}
 +
-{OPENSHIFT_VERSION}
-{openshift_version}
+{frontend-namespace}
 
 [time=10]
 [id="creating-connections"]
