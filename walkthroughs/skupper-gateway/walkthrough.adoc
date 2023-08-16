@@ -4,16 +4,14 @@
 :user-password: openshift
 :azure-password: azure
 :standard-fail-text: Verify that you followed all the steps. If you continue to have issues, contact a workshop assistant.
-:namespace: {user-username}
+:aws-namespace: aws
 :frontend-namespace: {user-username}-patient-front
 :backend-namespace: {user-username}-patient-back
 :rhosak: Red Hat OpenShift Streams for Apache Kafka
 :rhoas: Red Hat OpenShift Application Services
 :cloud-console: https://console.redhat.com
 :codeready-project: FleurDeLune
-:aws-password: {aws-password}
-:aws-password2: {{aws-password}}
-:aws-password3: {{ aws_a_provision_data.openshift_cluster_admin_username }}
+
 
 
 // URLs
@@ -53,21 +51,13 @@ Red Hat Service Interconnect enables application and service connectivity across
 .AWS OpenShift Links
 ****
 * link:{openshift-host}/terminal[AWS Terminal Console, window="_blank", , id="resources-codeready-url"]
-* link:{openshift-host}/topology/ns/{namespace}[AWS Developer Console, window="_blank"]
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
 ****
 [type=walkthroughResource]
 .AWS Credentials
 ****
 * *username:* `{user-username}`
 * *password:* `{user-password}`
-{aws-password}
-{{aws-password}}
-{{aws-password2}}
-{aws-password2}
-{{aws-password3}}
-{aws-password3}
-
-
 
 
 ****
