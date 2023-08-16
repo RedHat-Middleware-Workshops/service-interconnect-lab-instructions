@@ -56,6 +56,9 @@ Red Hat Service Interconnect enables application and service connectivity across
 ****
 * *username:* `{user-username}`
 * *password:* `{user-password}`
+{aws-admin}
+{aws-password}
+{aws-subdomain}
 ****
 [type=walkthroughResource]
 .Azure OpenShift Links
