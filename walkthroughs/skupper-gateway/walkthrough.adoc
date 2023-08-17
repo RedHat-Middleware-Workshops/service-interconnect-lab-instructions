@@ -5,6 +5,7 @@
 :azure-password: azure
 :standard-fail-text: Verify that you followed all the steps. If you continue to have issues, contact a workshop assistant.
 :aws-namespace: aws
+:azure-namespace: azure
 :frontend-namespace: {user-username}-patient-front
 :backend-namespace: {user-username}-patient-back
 :rhosak: Red Hat OpenShift Streams for Apache Kafka
@@ -51,7 +52,7 @@ Red Hat Service Interconnect enables application and service connectivity across
 .OpenShift Links
 ****
 * link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
-* link:{azure-console}/topology/ns/{namespace}[Azure Developer Console, window="_blank"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
 ****
 
 [type=taskResource]
