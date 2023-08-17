@@ -79,7 +79,7 @@ Red Hat Service Interconnect enables application and service connectivity across
 +
 {user-password}
 +
-{ aws-subdomain }
+{aws-subdomain}
 
 [time=10]
 [id="creating-connections"]
