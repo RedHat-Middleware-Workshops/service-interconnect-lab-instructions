@@ -47,32 +47,21 @@ Join us in this lab as we take you through MediCorp's transformational journey. 
 ## What is Red Hat Service Interconnect?
 Red Hat Service Interconnect enables application and service connectivity across different environments through layer 7 addressing and routing. Using a simple command line interface, interconnections are created in a matter of minutes, avoiding extensive networking planning, and overhead. All interconnections between environments use mutual TLS(mTLS) to keep your organization’s infrastructure and data protected. Red Hat Service Interconnect is based on the open source Skupper project.
 
-[type=walkthroughResource]
-.AWS OpenShift Links
+[type=taskResource]
+.OpenShift Links
 ****
-* link:{openshift-host}/terminal[AWS Terminal Console, window="_blank", , id="resources-codeready-url"]
 * link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
+* link:{azure-console}/topology/ns/{namespace}[Azure Developer Console, window="_blank"]
 ****
-[type=walkthroughResource]
-.AWS Credentials
-****
-* *username:* `{user-username}`
-* *password:* `{user-password}`
 
-
-****
-[type=walkthroughResource]
-.Azure OpenShift Links
-****
-* link:{azure-console}/terminal[Azure Terminal Console, window="_blank", , id="resources-codeready-url"]
-* link:https://{{ ocp4_workload_service_interconnect_azure_console_hostname }}/topology/ns/{namespace}[Azure Developer Console, window="_blank"]
-****
-[type=walkthroughResource]
-.Azure Credentials
+[type=taskResource]
+.Credentials
 ****
 * *username:* `{user-username}`
 * *password:* `{user-password}`
 ****
+
+
 {openshift-host}
 +
 {user-username}
@@ -80,6 +69,8 @@ Red Hat Service Interconnect enables application and service connectivity across
 {user-password}
 +
 {azure-subdomain}
++
+{azure-console}
 
 [time=10]
 [id="creating-connections"]
