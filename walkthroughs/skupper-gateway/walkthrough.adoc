@@ -91,7 +91,7 @@ Red Hat Service Interconnect enables application and service connectivity across
 +
 {{ aws_a_provision_data.openshift_cluster_admin_username }}
 +
-{ aws_a_provision_data.openshift_cluster_admin_username }
+{ aws-subdomain }
 
 [time=10]
 [id="creating-connections"]
