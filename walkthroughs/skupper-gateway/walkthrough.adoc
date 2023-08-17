@@ -1,5 +1,5 @@
 // Attributes
-:walkthrough: Connecting applications across clouds with Skupper
+:walkthrough: Connecting applications across clouds with Red Hat Service Interconnect
 :title: Lab 1 - {walkthrough}
 :user-password: openshift
 :azure-password: azure
