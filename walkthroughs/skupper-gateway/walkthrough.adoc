@@ -72,6 +72,8 @@ Red Hat Service Interconnect enables application and service connectivity across
 {azure-subdomain}
 +
 {azure-console}
++
+{rhel-hostname}
 
 [time=10]
 [id="creating-connections"]
