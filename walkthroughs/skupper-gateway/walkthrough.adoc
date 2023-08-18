@@ -109,7 +109,7 @@ image::images/empty_portal.png[empty_portal, role="integr8ly-img-responsive"]
 +
 [source,bash,role=copy]
 ----
-ssh {rhel_vm_login}
+ssh {rhel-hostname}
 ----
 +
 .Output
