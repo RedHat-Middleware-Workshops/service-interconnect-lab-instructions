@@ -30,6 +30,8 @@ In this lab you discover how to build a service network to connect disparate ser
 == What is Red Hat Service Interconnect?
 Red Hat Service Interconnect enables application and service connectivity across different environments through layer 7 addressing and routing. Using a simple command line interface, interconnections are created in a matter of minutes, avoiding extensive networking planning, and overhead. All interconnections between environments use mutual TLS(mTLS) to keep your organization’s infrastructure and data protected. Red Hat Service Interconnect is based on the open source Skupper project.
 
+Click *Next* to proceed
+
 [time=2]
 [id="MediCorp Intro"]
 == Modernizing MediCorps Legacy Patient Portal
@@ -49,6 +51,8 @@ Outlined below are the key challenges and questions that arose during this trans
 **Hybrid Cloud Possibilities**: Exploring the potential of a hybrid cloud approach with multiple service providers adds another layer of consideration to the modernization journey.
 
 Join us in this lab as we take you through MediCorp's transformational journey. Discover how they harnessed the power of Red Hat Service Interconnect as a pivotal component of their modernization strategy, effectively tackling the challenges mentioned above and more.
+
+Click *Next* to proceed
 
 
 [type=taskResource]
@@ -608,6 +612,8 @@ image::images/jim_azure.png[jim_azure, role="integr8ly-img-responsive"]
 This shows that the payment-processor in Azure cluster has taken over as soon as we made the processor in the datacentre unavailable over the network. As indicated in the image above the first payment was processed by RHEL datacentre and as soon as we took it down the the second payment was processed by Azure cluster.
 
 image::images/azure_take_over.png[azure_take_over, role="integr8ly-img-responsive"]
+
+Click **Next** to proceed to the next scenario.
 
 [type=taskResource]
 .OpenShift Links
