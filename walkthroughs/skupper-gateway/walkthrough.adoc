@@ -25,7 +25,14 @@
 
 In this lab you discover how to build a service network to connect disparate services across different environments using Red Hat Service Interconnect.
 
-## Modernizing MediCorps Legacy Patient Portal
+[time=2]
+[id="Red Hat Service Interconnect"]
+== What is Red Hat Service Interconnect?
+Red Hat Service Interconnect enables application and service connectivity across different environments through layer 7 addressing and routing. Using a simple command line interface, interconnections are created in a matter of minutes, avoiding extensive networking planning, and overhead. All interconnections between environments use mutual TLS(mTLS) to keep your organization’s infrastructure and data protected. Red Hat Service Interconnect is based on the open source Skupper project.
+
+[time=2]
+[id="MediCorp Intro"]
+== Modernizing MediCorps Legacy Patient Portal
 
 Let us delve into the world of MediCorp, a healthcare organization offering a comprehensive portal for both doctors and patients. This portal facilitates various tasks for patients, including bill payments and appointment checks.
 
@@ -43,9 +50,6 @@ Outlined below are the key challenges and questions that arose during this trans
 
 Join us in this lab as we take you through MediCorp's transformational journey. Discover how they harnessed the power of Red Hat Service Interconnect as a pivotal component of their modernization strategy, effectively tackling the challenges mentioned above and more.
 
-
-## What is Red Hat Service Interconnect?
-Red Hat Service Interconnect enables application and service connectivity across different environments through layer 7 addressing and routing. Using a simple command line interface, interconnections are created in a matter of minutes, avoiding extensive networking planning, and overhead. All interconnections between environments use mutual TLS(mTLS) to keep your organization’s infrastructure and data protected. Red Hat Service Interconnect is based on the open source Skupper project.
 
 [type=taskResource]
 .OpenShift Links
