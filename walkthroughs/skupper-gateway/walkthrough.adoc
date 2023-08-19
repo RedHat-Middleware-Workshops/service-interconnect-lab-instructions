@@ -94,6 +94,10 @@ The following steps will showcase how you can connect the frontend to services(d
 
 === Deployment overview: AWS cluster
 . Open the console of the OpenShift cluster on AWS link:{openshift-host}/topology/ns/aws[AWS Developer Console, window="_blank"]
++
+*username:* `{user-username}`
++
+*password:* `{aws-password}`
 
 . Double check to make sure you are in the aws namespace and expect to see frontend (called patient-portal-frontend) deployed. 
 +
@@ -415,6 +419,10 @@ image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integ
 
 === Deployment overview: Azure cluster
 . Open the console of the OpenShift cluster on Azure link:{azure-console}/topology/ns/azure[Azure Developer Console, window="_blank"]
++
+*username:* `{user-username}`
++
+*password:* `{aws-password}`
 
 . Double check to make sure you are in the azure namespace and expect to see payment-processor deployed. 
 +
