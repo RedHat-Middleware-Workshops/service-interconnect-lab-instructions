@@ -193,7 +193,7 @@ skupper init --enable-console --enable-flow-collector --console-auth unsecured
 
 === Initialize Red Hat Service Interconnect in the RHEL Datacentre
 
-The skupper cli is available through the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine.
+Go to the terminal on your local machine where you are logged in to the RHEL datacenter. The skupper cli is also available through the RHEL datacentre terminal that you have connected. 
 
 . Switch the skupper cli podman site mode as we will be using podman to run our skupper containers
 +
@@ -244,7 +244,7 @@ This confirms that we have not yet established the connection between the sites.
 
 To create a link between the environments, you create a token on one of the environments, and then use the token to create the link on the other.
 
-. Navigate to the browser tab pointing to the OpenShift Web terminal on the AWS cluster. 
+. Navigate to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
 +
 image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 
@@ -266,7 +266,7 @@ skupper token create secret_aws_vm.token
 Token written to secret_aws_vm.token
 ----
 
-. Display the token using the below command and copy it in a notepad or nay text editor of your choice
+. Display the token using the below command and copy it in a notepad or any text editor of your choice
 +
 [source,bash,role=copy]
 ----
@@ -300,9 +300,9 @@ This is actually an OpenShift secret which contains a certificate. This certific
 +
 The next step is creating the link on the RHEL datacentre with the token. 
 
-. Navigate to the the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
+. Navigate to the the *RHEL datacentre* terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
-. Create a new file on the RHEL datacentre where you will paste the token you just generated on the AWS cluster.
+. Create a new file on the **RHEL datacentre* where you will paste the token you just generated on the AWS cluster.
 +
 [source,bash,role=copy]
 ----
@@ -332,7 +332,7 @@ skupper expose host host.containers.internal --address database --port 5432
 skupper expose host host.containers.internal --address payment-processor --port 8080 --protocol http
 ----
 
-. Navigate back to the browser tab pointing to the OpenShift Web terminal on the AWS cluster. 
+. Navigate back to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
 +
 image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 
@@ -342,7 +342,7 @@ image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-res
 
  
 
-. Create proxy services that will redirect to the services running on the RHEL datacentre
+. Create proxy services on the *AWS terminal* that will redirect to the services running on the datacentre
 +
 [source,bash,role=copy]
 ----
@@ -352,9 +352,9 @@ skupper service create payment-processor 8080 --protocol http
 +
 You have now established a secure link between the two environments.
 
-. Now go to the browser tab where you've opened the patient-portal frontend or click this link link:patient-portal-frontend-aws/{openshift-host}/topology/ns/aws[AWS Developer Console, window="_blank"] to access it. 
+. Now go to the browser tab where you've opened the patient-portal frontend or click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access it. 
 
-. You should now be able to see the the list of patients and doctors that have been retrieved from the database. This shows that we have successfully connected our front end to the database using Red Hat Service Interconnect
+. Refresh the page and you should now be able to see the list of patients and doctors that have been retrieved from the database. This shows that we have successfully connected our front end to the database using Red Hat Service Interconnect
 + 
 image::images/portal_names.png[portal_names, role="integr8ly-img-responsive"]
 +
@@ -470,11 +470,11 @@ Now using project "azure" on server "https://172.30.0.1:443"
 skupper init
 ----
 
-=== Create a link between the namespace on OpenShift cluster and the RHEL datacenter
+=== Create a link between the namespace on AWS and Azure cluster
 
 Since we have already initialized the Service Interconnect router in the aws namespace in the AWS cluster in the previous scenario, we do not need to repeat that step. We just need to create a token in the AWS environment that would be used by the Azure cluster
 
-. Navigate to the browser tab pointing to the OpenShift Web terminal on the AWS cluster. 
+. Navigate to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
 +
 image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 +
@@ -530,7 +530,7 @@ This is actually an OpenShift secret which contains a certificate. This certific
 +
 The next step is creating the link on the Azure cluster with the token. 
 
-. Navigate to the the Azure terminal
+. Navigate to the *Azure terminal*
 +
 image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
@@ -540,7 +540,7 @@ image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-res
 
 
 
-. Create a new file on the Azure cluster where you will paste the token you just generated on the AWS cluster.
+. Create a new file on the *Azure cluster* where you will paste the token you just generated on the AWS cluster.
 +
 [source,bash,role=copy]
 ----
@@ -549,7 +549,7 @@ vi secret_aws_azure.token
 
 . Paste the token in this file and save it using the buttons esc followed by :wq and hit enter to save the file 
 
-. Create a link on the  Azure cluster using the token
+. Create a link on the  *Azure cluster* using the token
 +
 [source,bash,role=copy]
 ----
@@ -562,7 +562,7 @@ Site configured to link to https://claims-aws.apps.cluster-gqnbg.gqnbg.sandbox10
 Check the status of the link using 'skupper link status'.
 ----
 
-. Finally, you need to expose the payment-processor service over the link. This will allow the frontend app on the AWS cluster to connect to the payment-processor on Azure.
+. Finally, you need to expose the payment-processor service over the link. Issue the below command in *Azure terminal* .This will allow the frontend app to connect to the payment-processor on *Azure*.
 +
 [source,bash,role=copy]
 ----
@@ -573,7 +573,7 @@ Now we have two payment-processors one in the datacentre and the other in the Az
 +
 image::images/processor_down_arch.png[processor_down_arch, role="integr8ly-img-responsive"]
 
-. Click this link link:patient-portal-frontend-aws/{openshift-host}/topology/ns/aws[AWS Developer Console, window="_blank"] to access the patient portal.
+. Click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
 . Click on the Patient Jim Halpert
 +
@@ -593,7 +593,7 @@ image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"
 
 . Now let's take down the payment-processor in the datacentre and see if the one in the Azure cluster takes over.  
 
-. Navigate to the the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
+. Navigate to the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
 . Instead of killing the container running the payment-processor in the datacentre, let's just unexpose it over the network and make it unaccessible. Run the below command in the temrinal of RHEL datacentre
 +
@@ -602,7 +602,7 @@ image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"
 skupper unexpose host host.containers.internal --address payment-processor 
 ----
 
-. Go back to the patient portal or Click this link link:patient-portal-frontend-aws/{openshift-host}/topology/ns/aws[AWS Developer Console, window="_blank"] to access the patient portal.
+. Go back to the patient portal or Click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
 . Now try to make the second payment for patient Jim Halpert
 +
@@ -617,7 +617,7 @@ image::images/jim_second_submit.png[jim_second_submit, role="integr8ly-img-respo
 +
 image::images/jim_azure.png[jim_azure, role="integr8ly-img-responsive"]
 
-This shows that the payment-processor in Azure cluster has taken over as soon as we made the processor in the datacentre unavailable over the network. As indicated in the image above the first payment was processed by RHEL datacentre and as soon as we took it down the the second payment was processed by Azure cluster.
+This shows that the payment-processor in Azure cluster has taken over as soon as we made the processor in the datacentre unavailable over the network. As indicated in the image above the first payment was processed by RHEL datacentre and as soon as we took it down the second payment was processed by Azure cluster.
 
 image::images/azure_take_over.png[azure_take_over, role="integr8ly-img-responsive"]
 
@@ -669,7 +669,7 @@ image::images/alt_route_no_arrow.png[alt_route_no_arrow, role="integr8ly-img-res
 
 Since we have already initialized the Service Interconnect router in the azure namespace in the Azure cluster in the previous scenario and the RHEL datacentre, we do not need to repeat that step. We just need to create a token in the Azure environment that would be used by the Datacentre
 
-. Navigate to the the Azure terminal
+. Navigate to the *Azure terminal*
 +
 image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
@@ -724,9 +724,9 @@ This is actually an OpenShift secret which contains a certificate. This certific
 +
 The next step is creating the link on the RHEL datacentre with the token. 
 
-. Navigate to the the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
+. Navigate to the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
-. Create a new file on the RHEL datacentre where you will paste the token you just generated on the Azure cluster.
+. Create a new file on the *RHEL datacentre* where you will paste the token you just generated on the Azure cluster.
 +
 [source,bash,role=copy]
 ----
@@ -735,7 +735,7 @@ vim secret_azure_vm.token
 
 . Paste the token in this file and save it using the buttons esc followed by :wq and hit enter to save the file 
 
-. Create a link on the  RHEL datacentre using the token
+. Create a link on the  *RHEL datacentre* using the token
 +
 [source,bash,role=copy]
 ----
@@ -751,10 +751,10 @@ Check the status of the link using 'skupper link status'.
 
 
 
-=== Deleting the direct link between RHEL Datacentre and Azure cluster
+=== Deleting the direct link between AWS and Azure cluster
 We have now established a direct link between the Datacentre and Azure cluster. In the next steps we will delete the direct link AWS and Azure and verify if the patient portal in the frontend is able to able to reach the payment-processor of Azure via the Datacentre (indirect connection)
 
-. Navigate to the the Azure terminal
+. Navigate to the *Azure terminal*
 +
 image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
 
@@ -791,7 +791,7 @@ Skupper is enabled for namespace "azure" in interior mode. It is connected to 2 
 
 . Examine the output carefully. You will notice that the output indicates that Azure is to connected 2 sites but **1 amongst the connections is indirect** . This indicates that Azure is connected to AWS indirectly. 
 
-. To verify if the connection, works properly lets try to make payment for another patient. Click this link link:patient-portal-frontend-aws/{openshift-host}/topology/ns/aws[AWS Developer Console, window="_blank"] to access the patient portal.
+. To verify if the connection, works properly lets try to make payment for another patient. Click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
 . Now try to make the payment for patient Kevin Malone
 +
@@ -801,9 +801,11 @@ image::images/kevin.png[kevin, role="integr8ly-img-responsive"]
 +
 image::images/malone-azure.png[malone-azure, role="integr8ly-img-responsive"]
 +
-This indicates that though the direct link is broken the patient portal in AWS is able to reach the payment-processor in Azure
+This indicates that though the direct link is broken the patient portal in AWS is able to reach the payment-processor in Azure indirectly
 
 image::images/alt_route_arch.png[alt_route_arch, role="integr8ly-img-responsive"]
+
+Click *Next* to proceed
 
 [type=taskResource]
 .OpenShift Links
@@ -825,9 +827,15 @@ image::images/alt_route_arch.png[alt_route_arch, role="integr8ly-img-responsive"
 * *password:* `{aws-password}`
 ****
 
+[time=2]
+[id="Conclude"]
+== Additional Resources
 
+This brings us to the end of all the demo scenarios. Learn more about Red hat Service Interconnect using the resources below:
 
+* link:https://www.redhat.com/en/technologies/cloud-computing/service-interconnect[Red Hat Service Interconnect Website, window="_blank"]
 
+* link:https://developers.redhat.com/products/service-interconnect/overview[Red Hat Service Interconnect Developers Website, window="_blank"]
 
 
 
