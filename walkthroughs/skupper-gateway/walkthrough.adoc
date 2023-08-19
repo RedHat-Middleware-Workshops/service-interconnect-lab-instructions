@@ -352,7 +352,7 @@ skupper service create payment-processor 8080 --protocol http
 +
 You have now established a secure link between the two environments.
 
-. Now go to the browser tab where you've opened the patient-portal frontend or click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access it. 
+. Now go to the browser tab where you've opened the patient-portal frontend or click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access it. 
 
 . Refresh the page and you should now be able to see the list of patients and doctors that have been retrieved from the database. This shows that we have successfully connected our front end to the database using Red Hat Service Interconnect
 + 
@@ -573,7 +573,7 @@ Now we have two payment-processors one in the datacentre and the other in the Az
 +
 image::images/processor_down_arch.png[processor_down_arch, role="integr8ly-img-responsive"]
 
-. Click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access the patient portal.
+. Click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
 . Click on the Patient Jim Halpert
 +
@@ -602,7 +602,7 @@ image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"
 skupper unexpose host host.containers.internal --address payment-processor 
 ----
 
-. Go back to the patient portal or Click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access the patient portal.
+. Go back to the patient portal or Click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
 . Now try to make the second payment for patient Jim Halpert
 +
@@ -791,7 +791,7 @@ Skupper is enabled for namespace "azure" in interior mode. It is connected to 2 
 
 . Examine the output carefully. You will notice that the output indicates that Azure is to connected 2 sites but **1 amongst the connections is indirect** . This indicates that Azure is connected to AWS indirectly. 
 
-. To verify if the connection, works properly lets try to make payment for another patient. Click this link:https://patient-portal-frontend-aws/{aws-subdomain}[link, window="_blank"] to access the patient portal.
+. To verify if the connection, works properly lets try to make payment for another patient. Click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
 . Now try to make the payment for patient Kevin Malone
 +
