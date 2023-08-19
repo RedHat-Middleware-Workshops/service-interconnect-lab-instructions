@@ -1,8 +1,7 @@
 // Attributes
 :walkthrough: Connecting applications across clouds with Red Hat Service Interconnect
 :title: Lab 1 - {walkthrough}
-:user-password: openshift
-:azure-password: azure
+:user-password: {aws-password}
 :standard-fail-text: Verify that you followed all the steps. If you continue to have issues, contact a workshop assistant.
 :aws-namespace: aws
 :azure-namespace: azure
@@ -56,24 +55,18 @@ Red Hat Service Interconnect enables application and service connectivity across
 ****
 
 [type=taskResource]
-.Credentials
+.RHEL Login
+****
+* `ssh labuser@{rhel-hostname}`
+****
+
+[type=taskResource]
+.Common Credentials
 ****
 * *username:* `{user-username}`
-* *password:* `{user-password}`
+* *password:* `{aws-password}`
 ****
 
-
-{openshift-host}
-+
-{user-username}
-+
-{user-password}
-+
-{azure-subdomain}
-+
-{azure-console}
-+
-{rhel-hostname}
 
 [time=10]
 [id="creating-connections"]
@@ -380,6 +373,25 @@ image::images/single_app_arch.png[single_app_arch, role="integr8ly-img-responsiv
 
 Click **Next** to proceed to the next scenario.
 
+[type=taskResource]
+.OpenShift Links
+****
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+****
+
+[type=taskResource]
+.RHEL Login
+****
+* `ssh labuser@{rhel-hostname}`
+****
+
+[type=taskResource]
+.Common Credentials
+****
+* *username:* `{user-username}`
+* *password:* `{aws-password}`
+****
 
 
 [time=10]
@@ -394,7 +406,7 @@ image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integ
 
 
 === Deployment overview: Azure cluster
-. Open the console of the OpenShift cluster on Azure link:{azure-openshift-host}/topology/ns/azure[Azure Developer Console, window="_blank"]
+. Open the console of the OpenShift cluster on Azure link:{azure-console}/topology/ns/azure[Azure Developer Console, window="_blank"]
 
 . Double check to make sure you are in the azure namespace and expect to see payment-processor deployed. 
 +
@@ -593,6 +605,25 @@ This shows that the payment-processor in Azure cluster has taken over as soon as
 
 image::images/azure_take_over.png[azure_take_over, role="integr8ly-img-responsive"]
 
+[type=taskResource]
+.OpenShift Links
+****
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+****
+
+[type=taskResource]
+.RHEL Login
+****
+* `ssh labuser@{rhel-hostname}`
+****
+
+[type=taskResource]
+.Common Credentials
+****
+* *username:* `{user-username}`
+* *password:* `{aws-password}`
+****
 
 [time=10]
 [id="network-ha"]
@@ -756,12 +787,25 @@ This indicates that though the direct link is broken the patient portal in AWS i
 
 image::images/alt_route_arch.png[alt_route_arch, role="integr8ly-img-responsive"]
 
+[type=taskResource]
+.OpenShift Links
+****
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+****
 
+[type=taskResource]
+.RHEL Login
+****
+* `ssh labuser@{rhel-hostname}`
+****
 
-
-
-
-
+[type=taskResource]
+.Common Credentials
+****
+* *username:* `{user-username}`
+* *password:* `{aws-password}`
+****
 
 
 
