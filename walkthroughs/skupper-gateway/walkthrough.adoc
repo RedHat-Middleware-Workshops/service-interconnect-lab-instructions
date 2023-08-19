@@ -109,9 +109,9 @@ image::images/empty_portal.png[empty_portal, role="integr8ly-img-responsive"]
 === Deployment overview: RHEL Datacentre
 . Open the terminal on your local machine and login to the RHEL datacentre
 +
-[source,bash,role=copy]
+[source,bash,subs="attributes+"]
 ----
-ssh {rhel-hostname}
+ssh labuser@{rhel-hostname}
 ----
 +
 .Output
@@ -124,9 +124,9 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])?
 
 . Type **yes** and enter the below password
 +
-[source,bash,role=copy]
+[source,bash,subs="attributes+"]
 ----
-{password}
+{aws-password}
 ----
 
 . You should now be logged in as lab-user in the RHEL datacentre. The database and payment-processor are already deployed on the RHEL datacentre using podman. Run the below command in your RHEL datacentre terminal to confirm the that the database and payment-processor as running in the datacentre
