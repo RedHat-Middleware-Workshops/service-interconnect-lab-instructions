@@ -65,7 +65,7 @@ Click *Next* to proceed
 [type=taskResource]
 .RHEL Login
 ****
-* `ssh labuser@{rhel-hostname}`
+* `ssh lab-user@{rhel-hostname}`
 ****
 
 [type=taskResource]
@@ -112,7 +112,7 @@ image::images/empty_portal.png[empty_portal, role="integr8ly-img-responsive"]
 +
 [source,bash,subs="attributes+"]
 ----
-ssh labuser@{rhel-hostname}
+ssh lab-user@{rhel-hostname}
 ----
 +
 .Output
@@ -391,7 +391,7 @@ Click **Next** to proceed to the next scenario.
 [type=taskResource]
 .RHEL Login
 ****
-* `ssh labuser@{rhel-hostname}`
+* `ssh lab-user@{rhel-hostname}`
 ****
 
 [type=taskResource]
@@ -625,7 +625,7 @@ Click **Next** to proceed to the next scenario.
 [type=taskResource]
 .RHEL Login
 ****
-* `ssh labuser@{rhel-hostname}`
+* `ssh lab-user@{rhel-hostname}`
 ****
 
 [type=taskResource]
@@ -807,7 +807,7 @@ image::images/alt_route_arch.png[alt_route_arch, role="integr8ly-img-responsive"
 [type=taskResource]
 .RHEL Login
 ****
-* `ssh labuser@{rhel-hostname}`
+* `ssh lab-user@{rhel-hostname}`
 ****
 
 [type=taskResource]
