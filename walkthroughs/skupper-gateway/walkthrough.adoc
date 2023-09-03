@@ -443,9 +443,9 @@ Building a Service network between the two environments AWS and Azure  (more pre
 
 === Initialize Red Hat Service Interconnect in the Azure cluster
 
-. Open the browser window pointing to the OpenShift Console of the AWS OpenShift cluster. Click on the openshift command line terminal on the top menu to open a terminal window.
+. Open the browser window pointing to the OpenShift Console of the Azure OpenShift cluster. Click on the openshift command line terminal on the top menu to open a terminal window.
 +
-image::images/aws_terminal_icon.png[aws_terminal_icon, role="integr8ly-img-responsive"]
+image::images/azure_terminal_icon.png[azure_terminal_icon, role="integr8ly-img-responsive"]
 
 . The terminal should take two to three minutes to start up. Once done you should see something like this
 +
@@ -463,7 +463,7 @@ oc project azure
 Now using project "azure" on server "https://172.30.0.1:443"
 ----
 
-. Initialize the Service Interconnect Router by issuing the below command in the aws terminal. This should install the Service Interconnect resources in the aws namespace
+. Initialize the Service Interconnect Router by issuing the below command in the azure terminal. This should install the Service Interconnect resources in the azure namespace
 +
 [source,bash,role=copy]
 ----
