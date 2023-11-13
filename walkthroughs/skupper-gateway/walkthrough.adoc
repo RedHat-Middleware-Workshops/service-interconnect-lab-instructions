@@ -360,7 +360,7 @@ image::images/portal_names.png[portal_names, role="integr8ly-img-responsive"]
 +
 [NOTE]
 ====
-Refresh the browser tab if you are unable to see the list of patients
+Refresh the browser tab a couple of times after waiting a few seconds if you are unable to see the list of patients
 ====
 
 . Click on the Patient Angela Martin.
