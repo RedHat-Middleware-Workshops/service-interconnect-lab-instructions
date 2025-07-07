@@ -93,7 +93,7 @@ image::images/ui-aws-arch.png[ui-aws-arch, role="integr8ly-img-responsive"]
 The following steps will showcase how you can connect the frontend to services(database and payment-processor) in the datacentre using Red Hat Service Interconnect. Note that none of these services are exposed to the public internet
 
 === Deployment overview: AWS cluster
-. Open the console of the OpenShift cluster on AWS link:{openshift-host}/topology/ns/aws[AWS Developer Console, window="_blank"]
+. Open the console of the  link:{openshift-host}/topology/ns/aws[OpenShift cluster on AWS, window="_blank"]
 +
 *username:* `{user-username}`
 +
@@ -152,13 +152,13 @@ c54976092427  quay.io/redhatintegration/patient-portal-payment-processor:devnati
 
 Building a Service network between the two environments OpenShift and RHEL datacentre (more precisely between namespace of the OpenShift cluster and the services running on the datcentre) takes several steps:
 
-. Install Service Interconnect router in both environments.
+. Install Service Interconnect router in both environments by setting up the Service interconnect sites
 
 . Create a link configuration including a secure token in the openshift cluster and transfer it to the datacentre.
 
 . Use the link yaml on the datacentre to create a link between the namespaces of openshift cluster and the services running in the datacentre.
 
-. Expose services of one environment on the other using the connectors and corresponding listeners. In this case, you will create connectors for the  database and payment-processor on the datacentre, and corresponding listeners on the openshift cluster. This way the listeners on the openshift cluster can connect to the frontend as if the services were locally deployed. it as if they were locally deployed.
+. Expose services of one environment on the other using the connectors and corresponding listeners. In this case, you will create connectors for the  database and payment-processor on the datacentre, and corresponding listeners on the openshift cluster. This way the frontend on the openshift cluster can connect to the  database and payment-processor listeners as if the services were locally deployed. 
 
 === Initialize Red Hat Service Interconnect in the AWS cluster
 
@@ -237,7 +237,7 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 
 
-. First setup the listener in the AWS cluster.
+. First setup the listener in the AWS cluster by running the below command on the terminal of your AWS OpenShift cluster
 +
 [source,bash,role=copy]
 ----
@@ -265,7 +265,7 @@ image::images/connector_image.png[listener, role="integr8ly-img-responsive"]
 
 
 
-. Setup the Corresponding connectors in the RHEL datacentre.
+. Setup the Corresponding connectors in the RHEL datacentre by running the below commands in the RHEL datacentre terminal.
 +
 [source,bash,role=copy]
 ----
@@ -321,7 +321,7 @@ cat aws-rhel-link.yaml
 
 . Transfer the generated link configuration to the remote rhel datacentre.
 +
-[source,bash,role=copy]
+[source,bash,subs="attributes+"]
 ----
 scp aws-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skupper/namespaces/default/input/resources/
 ----
@@ -435,7 +435,7 @@ image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integ
 
 
 === Deployment overview: Azure cluster
-. Open the console of the OpenShift cluster on Azure link:{azure-console}/topology/ns/azure[Azure Developer Console, window="_blank"]
+. Open the  link:{azure-console}/topology/ns/azure[console of the OpenShift cluster on Azure, window="_blank"]
 +
 *username:* `{user-username}`
 +
@@ -485,25 +485,26 @@ image::images/connector_tab_azure.png[]
 
 . Add a connector with the below values and hit submit.
 +
-.. Name: payment-processor
-.. Port: 8080
-.. Routing key: payment-processor
-.. Selector: deployment=patient-portal-payment-processor
+.. Name: `payment-processor`
+.. Port: `8080``
+.. Routing key: `payment-processor``
+.. Selector: `deployment=patient-portal-payment-processor`
+.. Leave the rest of the values blank and hit submit
 +
 image::images/connector_wizard.png[]
 
 
 
-. Now go back to the  link:{openshift-host}/k8s/cluster/projects/azure/openshift-site-plugin[OpenShift cluster on AWS, window="_blank"] and generate a token , that the azure cluster can use to set up a virtual application network. Click on the Generate a token button.
+. Now go back to the  link:{openshift-host}/k8s/cluster/projects/aws/openshift-site-plugin[OpenShift cluster on AWS, window="_blank"] and generate a token , that the azure cluster can use to set up a virtual application network. Click on the Generate a token button.
 +
 image::images/token_gen_azure.png[]
 
 . You are presented with the Issue Access Token wizard. In the Configuration step, enter the following values, and click the Create button.
 +
-.. FileName: aws-azure-token
-.. Redemptions: 1
-.. Valid for: 60 min
-.. Leave the rest of the values blank
+.. FileName: `aws-azure-token``
+.. Redemptions: `1`
+.. Valid for: `60`` min
+.. Leave the rest of the values blank and click create
 +
 image::images/token_create_wizard.png[]
 
@@ -531,26 +532,7 @@ image::images/aws_azure_link_ready.png[]
 
 
 
-=== Create a link between the namespace on AWS and Azure cluster
-
-Since we have already initialized the Service Interconnect router in the aws namespace in the AWS cluster in the previous scenario, we do not need to repeat that step. We just need to create a token in the AWS environment that would be used by the Azure cluster
-
-. Navigate to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
-+
-image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
-+
-
-.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project aws` command to log back into the aws namespace
-+
-image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-
-
-
-The next step is creating the link on the Azure cluster with the token. 
-
-
-
-
+=== Testing Workload Failover
 
 
 
@@ -589,6 +571,7 @@ skupper connector delete payment-processor
 
 
 . Reload the site
++
 [source,bash,role=copy]
 ----
 skupper system reload
