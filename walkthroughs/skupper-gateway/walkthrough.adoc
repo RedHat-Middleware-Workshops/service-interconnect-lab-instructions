@@ -11,6 +11,8 @@
 :rhoas: Red Hat OpenShift Application Services
 :cloud-console: https://console.redhat.com
 :codeready-project: FleurDeLune
+:example-caption!:
+
 
 
 
@@ -191,13 +193,20 @@ Now using project "aws" on server "https://172.30.0.1:443"
 skupper site create aws --enable-link-access
 ----
 +
-> **What is a site?**  
-> A site represents a place where you have real running workloads. Each site contains an application service router which helps its workloads connect with workloads in remote sites.  
-> *Ex: A namespace is a site*
+.*What is a site?*
+====
+A site represents a place where you have real running workloads. Each site contains an application service router which helps its workloads connect with workloads in remote sites.
+
+_Ex: A namespace is a site_
+====
 +
-> **What is a router?**  
-> Layer 7 application routers form the backbone of a VAN in the same way that conventional network routers form the backbone of a VPN.  
-> However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application addresses).
+.*What is a router?*
+====
+Layer 7 application routers form the backbone of a VAN in the same way that conventional network routers form the backbone. 
+
+However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application addresses).
+====
+
 
 
 
@@ -229,10 +238,15 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 
 === Setup a listener on the OpenShift cluster and the RHEL datacenter
-> **What is a Listener?**  
-> A listener creates a local connection point that links to connectors in remote sites using routing keys.  
-> On Kubernetes, it’s implemented as a Service; on Docker, Podman, and Linux, it’s a listening socket on a local network interface.  
-> The listener exposes a host/port for local clients while using the routing key to connect with remote sites.
+
+.*What is a Listener?*
+====
+A listener creates a local connection point that links to connectors in remote sites using routing keys.  
+
+On Kubernetes, it’s implemented as a Service; on Docker, Podman, and Linux, it’s a listening socket on a local network interface.  
+
+The listener exposes a host/port for local clients while using the routing key to connect with remote sites.
+====
 
 
 
@@ -256,10 +270,14 @@ Listener "payment-processor" is configured.
 
 === Setup a Connectors on the the RHEL datacenter
 
-> **What is a Connector?**  
-> A connector links a local workload to listeners in remote sites using routing keys.  
-> On Kubernetes, it typically uses a pod selector; on Docker, Podman, and Linux, it uses host and port specifications.  
-> The routing key is a string identifier that binds the connector to matching listeners in remote sites.
+.*What is a Connector?*
+====
+A connector links a local workload to listeners in remote sites using routing keys.
+
+On Kubernetes, it typically uses a pod selector; on Docker, Podman, and Linux, it uses host and port specifications. 
+
+The routing key is a string identifier that binds the connector to matching listeners in remote sites.
+====
 
 image::images/connector_image.png[listener, role="integr8ly-img-responsive"]
 
@@ -282,10 +300,17 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 === Setup a link between the two environments using the link resource
 
-> **What is a Link?**  
-> A Link resource specifies remote connection endpoints and TLS credentials for establishing a mutual TLS connection to a remote site.  
-> To create an active link, the remote site must first enable link access.  
-> Link access provides an external access point for accepting links.
+> ****  
+> 
+
+.*What is a Link?*
+====
+A Link resource specifies remote connection endpoints and TLS credentials for establishing a mutual TLS connection to a remote site.  
+
+To create an active link, the remote site must first enable link access.  
+
+Link access provides an external access point for accepting links.
+====
 
 
 
@@ -519,6 +544,18 @@ image::images/connector_wizard.png[]
 . Now go back to the  link:{openshift-host}/k8s/cluster/projects/aws/openshift-site-plugin[OpenShift cluster on AWS, window="_blank"] and generate a token , that the azure cluster can use to set up a virtual application network. Click on the Generate a token button.
 +
 image::images/token_gen_azure.png[]
++
+.*What is an Access Token?*
+====
+An access token is a short-lived credential for creating a link between sites. It contains a URL and secret code from an access grant. Tokens have limited validity - by default, they can be used only once and expire after 15 minutes.
+
+What is an Access Grant?
+A site wishing to accept a link (site 1) creates an access grant. It uses the access grant to issue a corresponding access token and transfers it to a remote site (site 2). Site 2 submits the access token to site 1 for redemption. If the token is valid, site 1 sends site 2 the TLS host, port, and credentials required to create a link to site 1
+
+This image explains this concept in more detail.
+====
++
+image::images/token_redemption.png[]
 
 . You are presented with the Issue Access Token wizard. In the Configuration step, enter the following values, and click the Create button.
 +
