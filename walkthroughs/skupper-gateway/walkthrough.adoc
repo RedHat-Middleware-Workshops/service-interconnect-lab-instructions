@@ -392,7 +392,7 @@ image::images/payment-success.png[payment-success, role="integr8ly-img-responsiv
 
 . Navigate to the   https://skupper-network-observer-aws.{aws-subdomain}[network console, window="_blank"] to visualize the network.
 
-. Login using the below credentials
+. Choose the Login with OpenShift option and Login using the below credentials
 +
 .. username: `admin`
 .. password: `{aws-password}`
@@ -469,9 +469,11 @@ Building a Service network between the two environments AWS and Azure  (more pre
 
 . Use the token on the Azure to create a link between the namespaces of openshift clusters.
 
+. Note: We have the link resource in the previous example and the token in this example. Both are essentially an equivalent way to create the link and even when you examine both the link and token resource you will see that they both contain the tls certificate/credentials information to establish the network
+
 . Expose services of one environment on the other. In this case, you will expose the  payment-processor on Azure, so that the frontend can connect to it as if they were locally deployed. 
 
-. Recollect that in this scenario the front end is connected to two instances of the payment-processor: one in the data centre (link already established ) and the other in the Azure cluster (connection yet to be established). Both these instances together are intended to provide HA for the payment-processor. i.e, if one goes down the other will seamlessly take over. 
+. Recollect that in this scenario the front end will be connected to two instances of the payment-processor: one in the data centre (link already established ) and the other in the Azure cluster (connection yet to be established). Both these instances together are intended to provide HA for the payment-processor. i.e, if one goes down the other will seamlessly take over. 
 
 . For this scenario we will use the Service Interconnect OpenShift Plugin. This is another way to create your Virtual application network using a Graphical User Interface right from the OpenShift Console.
 
@@ -489,11 +491,15 @@ image::images/azure_project.png[azure_project, role="integr8ly-img-responsive"]
 +
 image::images/service_interconnect_tab.png[service_interconnect, role="integr8ly-img-responsive"]
 
-. Click on Create site and create a new site with the default values.
+. Click on Create site 
 +
 image::images/create_site.png[]
 
-. Next let's create a connector to the payment-processor in the Azure cluster, so that the corresponding listener on the aws cluster can connect to it. Click on the Connector tab and Click the create a connector button.
+. Click the Submit button to create a new site with the default values.
++
+image::images/azure_site_create.png[]
+
+. Next let's create a connector to the payment-processor in the Azure cluster, so that the corresponding listener on the aws cluster can connect to it. Click on the *Connector tab* and Click the create a connector button.
 
 +
 image::images/connector_tab_azure.png[]
@@ -501,8 +507,8 @@ image::images/connector_tab_azure.png[]
 . Add a connector with the below values and hit submit.
 +
 .. Name: `payment-processor`
-.. Port: `8080``
-.. Routing key: `payment-processor``
+.. Port: `8080`
+.. Routing key: `payment-processor`
 .. Selector: `deployment=patient-portal-payment-processor`
 .. Leave the rest of the values blank and hit submit
 +
@@ -516,7 +522,7 @@ image::images/token_gen_azure.png[]
 
 . You are presented with the Issue Access Token wizard. In the Configuration step, enter the following values, and click the Create button.
 +
-.. FileName: `aws-azure-token``
+.. FileName: `aws-azure`
 .. Redemptions: `1`
 .. Valid for: `60`` min
 .. Leave the rest of the values blank and click create
@@ -535,11 +541,11 @@ image::images/link_azure_tab.png[]
 +
 image::images/Redeem_access_token.png[]
 
-. Click next and upload the token you just downloaded.
+. Click next and upload the token you just downloaded. Click Create
 +
 image::images/token_upload_azure.png[]
 
-. The link should be ready in a few seconds.
+. Click Done.The link should be ready in a few seconds.
 +
 image::images/aws_azure_link_ready.png[]
 
@@ -552,7 +558,7 @@ image::images/aws_azure_link_ready.png[]
 
 
 Now we have two payment-processors one in the datacentre and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests or if it goes down the payment-processor in the Azure datacentre will seamlessly take over.
-+
+
 image::images/processor_down_arch.png[processor_down_arch, role="integr8ly-img-responsive"]
 
 . Click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access the patient portal.
@@ -577,7 +583,7 @@ image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"
 
 . Navigate to the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
-. Instead of killing the container running the payment-processor in the datacentre, let's just unexpose it over the network and make it unaccessible. Run the below command in the temrinal of RHEL datacentre
+. Instead of killing the container running the payment-processor in the datacentre, let's just unexpose it over the network and make it unaccessible. Run the below command in the terminal of RHEL datacentre
 +
 [source,bash,role=copy]
 ----
@@ -629,6 +635,8 @@ This shows that the payment-processor in Azure cluster has taken over as soon as
 
 image::images/azure_take_over.png[azure_take_over, role="integr8ly-img-responsive"]
 
+
+
 Click **Next** to proceed to the next scenario.
 
 [type=taskResource]
@@ -657,7 +665,7 @@ Click **Next** to proceed to the next scenario.
 
 In the previous scenario we've seen that Red Hat Service Interconnect can be used to provide High availability/replication for services across different environments where if one instance goes down, the other instance with the same service name takes over seamlessly. 
 
-In this scenario we will learn about another aspect Red Hat Service Interconnect where it provides high availability for the network connections. For example, in the previous scenario for the patient portal on AWS to access the payment processor on Azure, we established a direct skupper network connection between AWS and Azure. What if the network between AWS and Azure is unstable for some reason. Red Hat Service Interconnect looks for alternative paths to reach the payment-processor on Azure if the direct link is unstable or broken.
+In this scenario we will learn about another aspect Red Hat Service Interconnect where it provides high availability for the network connections. For example, in the previous scenario for the patient portal on AWS to access the payment processor on Azure, we established a direct skupper network connection between AWS and Azure. What if the actual network between AWS and Azure is unstable for some reason. Red Hat Service Interconnect looks for alternative paths to reach the payment-processor on Azure if the direct link is unstable or broken.
 
 image::images/network_down_arch.png[network_down_arch, role="integr8ly-img-responsive"]
 
@@ -699,7 +707,7 @@ The next step is creating the link on the RHEL datacentre with this.
 
 . Create a new file on the *RHEL datacentre* where you will paste the token you just generated on the Azure cluster.
 +
-[source,bash,role=copy]
+[source,bash,subs="attributes+"]
 ----
 scp azure-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skupper/namespaces/default/input/resources/
 ----
@@ -711,7 +719,7 @@ scp azure-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/sk
 {aws-password}
 ----
 
-. Since the link definition has now been transferred to the RHEL server, reload the Virtual Application Network by running the command below from the RHEL terminal.
+. Since the link definition has now been transferred to the RHEL server, reload the Virtual Application Network by running the command below from the *RHEL terminal*.
 + 
 [source,bash,role=copy]
 ----
@@ -722,7 +730,19 @@ skupper system reload
 +
 .Output
 ----    
-
+Sources will be consumed from namespace "default"
+2025/07/07 22:53:03 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/ca.crt
+2025/07/07 22:53:03 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/tls.crt
+2025/07/07 22:53:03 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/tls.key
+2025/07/07 22:53:04 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/tls.key
+2025/07/07 22:53:04 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/ca.crt
+2025/07/07 22:53:04 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/tls.crt
+2025/07/07 22:53:04 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/tls.crt
+2025/07/07 22:53:04 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/tls.key
+2025/07/07 22:53:04 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/ca.crt
+Site "datacentre" has been created on namespace "default"
+Platform: podman
+Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----  
 
 
@@ -746,7 +766,7 @@ image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-res
 +
 [source,bash,role=copy]
 ----
-skupper link delete aws-azure-token
+skupper link delete aws-azure
 ----
 +
 .Output
