@@ -319,7 +319,7 @@ cat aws-rhel-link.yaml
 ----
 
 
-. Transfer the generated link configuration to the remote rhel datacentre.
+. Transfer the generated link configuration to the remote rhel datacentre. Run this command on the AWS cluster terminal
 +
 [source,bash,subs="attributes+"]
 ----
@@ -350,11 +350,11 @@ Platform: podman
 Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----  
 
-. From the OpenShift AWS Terminal (upper terminal), run the following command to deploy the {rhsi} Network Console.
+. From the OpenShift AWS Terminal (upper terminal), run the following command to deploy the Service Network Console.
 +
 [source,bash,role=copy]
 ----
-oc apply -f https://raw.githubusercontent.com/RedHat-Middleware-Workshops/service-interconnect-lab-instructions/refs/heads/main/install.sh/network_console_deploy.yaml -n aws
+oc apply -f https://raw.githubusercontent.com/RedHat-Middleware-Workshops/service-interconnect-lab-instructions/refs/heads/main/network_console_deploy.yaml -n aws
 ----
 
 You will use this console to visualize the network later. Since it takes a few seconds to initialize, go ahead and deploy it now. While it is getting deployed, proceed to the next steps to save time.
@@ -390,9 +390,24 @@ image::images/payment_button.png[payment_button, role="integr8ly-img-responsive"
 +
 image::images/payment-success.png[payment-success, role="integr8ly-img-responsive"]
 
-. Navigate to the network console to visualize the network.
-+
+. Navigate to the   https://skupper-network-observer-aws.{aws-subdomain}[network console, window="_blank"] to visualize the network.
 
+. Login using the below credentials
++
+.. username: `admin`
+.. password: `{aws-password}`
+
+. Click Allow selected permissions
++
+image::images/allow-select_permissions.png[] 
+
+. You should now be able to visualize the network using the topology view
++
+image::images/topology_network-observer.png[]
+
+. Feel free to explore the other views such as the services, Sites, Components and Processes to get a better understanding of the network traffic
++
+image::images/network_traffic_observer.png[]
 
 
 
