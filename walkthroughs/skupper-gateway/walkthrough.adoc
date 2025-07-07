@@ -188,7 +188,7 @@ Now using project "aws" on server "https://172.30.0.1:443"
 +
 [source,bash,role=copy]
 ----
-skupper init --enable-console --enable-flow-collector --console-auth unsecured
+skupper site create aws --enable-link-access
 ----
 
 === Initialize Red Hat Service Interconnect in the RHEL Datacentre
@@ -202,47 +202,57 @@ Go to the terminal on your local machine where you are logged in to the RHEL dat
 export SKUPPER_PLATFORM=podman
 ----
 
-. Confirm the same the running the below command
-+
-[source,bash,role=copy]
-----
-skupper switch
-----
-+
-.Output
-----
-podman
-----
+
 
 . Initialize the Service Interconnect Router by issuing the below command in the RHEL datacentre terminal. 
 +
 [source,bash,role=copy]
 ----
-skupper init --ingress none
+skupper site create datacentre
 ----
 +
 .Output
 ----
-Skupper is now installed for user 'lab-user'.  Use 'skupper status' to get more information.
+File written to /home/lab-user/.local/share/skupper/namespaces/default/input/resources/Site-datacentre.yaml
 ----
 
-. To see the status of the skupper network
-+
-[source,bash,role=copy]
-----
-skupper status
-----
-+
-.Output
-----
-Skupper is enabled for "lab-user" with site name "bastion.example.com-lab-user" in interior mode. It is not connected to any other sites. It has no exposed services.
-----
 
-This confirms that we have not yet established the connection between the sites.
 
 === Create a link between the namespace on OpenShift cluster and the RHEL datacenter
 
+. First setup the listener in the AWS cluster.
++
+[source,bash,role=copy]
+----
+skupper listener create database 5432
+skupper listener create payment-processor 8080
+----
++
+.Output
+----
+Waiting for create to complete...
+Listener "database" is configured.
+Waiting for create to complete...
+Listener "payment-processor" is configured.
+----
+
+. Next setup the Corresponding connectors in the RHEL datacentre.
++
+[source,bash,role=copy]
+----
+skupper connector create database 5432 --host 127.0.0.1
+skupper connector create payment-processor 8080 --host 127.0.0.1
+----
++
+.Output
+----
+File written to /home/lab-user/.local/share/skupper/namespaces/default/input/resources/Connector-database.yaml
+File written to /home/lab-user/.local/share/skupper/namespaces/default/input/resources/Connector-payment-processor.yaml
+----
+
 To create a link between the environments, you create a token on one of the environments, and then use the token to create the link on the other.
+
+
 
 . Navigate to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
 +
@@ -258,99 +268,55 @@ image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-res
 +
 [source,bash,role=copy]
 ----
-skupper token create secret_aws_vm.token
-----
-+
-.Output
-----
-Token written to secret_aws_vm.token
+skupper link generate > aws-rhel-link.yaml
 ----
 
-. Display the token using the below command and copy it in a notepad or any text editor of your choice
+
+. Feel free toExamine the token using the below command
 +
 [source,bash,role=copy]
 ----
-cat secret_aws_vm.token
+cat aws-rhel-link.yaml
 ----
-+
-.Output
-----
-apiVersion: v1
-data:
-  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURMRENDQWhTZ0F3SUJBZ0lRU3RqbXd4Z2dOVWtkZnhOa1RManYxakFOQmdrcWhraUc5dzBCQVFzRkFEQWEKTVJnd0ZnWURWUVFERXc5emEzVndjR1Z5TFhOcGRHVXRZMkV3SGhjTk1qTXdPREV5TURnek16UXdXaGNOTWpndwpPREV3TURnek16UXdXakFhTVJnd0ZnWURWUVFERXc5emEzVndjR1Z5TFhOcGRHVXRZMkV3Z2dFaU1BMEdDU3FHClNJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUM1ZktmWHlEeEg5Q0lHNUdpbU5Ob29heGl4UGIwWkNyMVUKM2J1c1lMQm5HZmZ3MEZQMEVPeUsrTVQyWEptOXdiVkNNY2tQOFp6UjFKRFZoeWpBK3AxRDlWQjRCeHpHYkVGQwp2aXhJOFcvUWdMRk85L1Q3RnN4czNUMmprTExTSVBlRDA2ZVJvQm9oMnpwNzZRV3JMVVdwZlJTNmtobG11NEpOCkJhRWdnTWpXMlhZQVh4YithWWI0ZWdTZSt4SUFXZG5UM2JjTExSQkw2dHY2MDVTdnhLeTVVSXVBRjFLTU5oeEoKbDFOd2xqd0p5ZVFwZzlWcEl2bzduUWlYNFM3Nm0rRHN0MUU5U3k5NUNQNEcrYy96bWJzZjk0TlJaWWlwQ29FeQo3KzNxOVJNSU5NZVY4VEdINEFVMHgxRGhiMWJ1RmxLTGJRR3RENjAyd2Rqa2ViSWVjcGRmQWdNQkFBR2piakJzCk1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXcKRHdZRFZSMFRBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVWGdqMGxHK0o0cVVWY1JQK29aWlE3bHVXRUFJdwpDd1lEVlIwUkJBUXdBb0lBTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFDRndxZXFpZWt1UDJFNUVWVVJzbi9tCnBVZFZKbUJKWTd2cTJjdm1KaVdSYlF6dEZEY3diUUlKdHArN0I2TGRQVGpBYkNUYU5MTEl6aUNhZlkrS1ZkeW4KR09RWmRlWHlvOWlzdnhJL1hOSzVLY28zbXN0VDRObXd3MWhRVVBvVGd6UUFNWURlNk0wcjRqa3MzbVhreHlwZgozdDdWalF2cUIxd044RFZ2cHc5RytQbllCK1ZiamEvMkZVSks2YkJudmdlL0ZPL08yTm5GeTdJUU1FYXpFdVZ4Ck8rcEFsNlFTSFlQYkpocko1YlBIa1lCSng2MFVSMEVjSVhXMGZWU21SWXplMmE4R05vZ016WDZWNVZtZ1JyL2sKU09KU0Z1WU1oMmh6R1oxdldQVTZ6YWhMeVlXUUFvZWNzVTNiaFpjVEFJdFk3OU9WaE1LbGswY1B3UTdGVHZ3QwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
-  password: alM4cmZDVHBEbWd1bFRoN2hlQ1hUdUcx
-kind: Secret
-metadata:
-  annotations:
-    skupper.io/generated-by: 87c49ffc-6440-4261-9270-d5831c6e1725
-    skupper.io/site-version: 1.4.1
-    skupper.io/url: https://claims-aws.apps.cluster-gqnbg.gqnbg.sandbox1039.opentlc.com:443/4c88edcf-38f9-11ee-b118-0a580a80010d
-  creationTimestamp: null
-  labels:
-    skupper.io/type: token-claim
-  name: 4c88edcf-38f9-11ee-b118-0a580a80010d
-----
-+
-[NOTE]
-====
-Do not copy the token from the instructions. Copy the token from the terminal. 
-====
+
+
 +
 This is actually an OpenShift secret which contains a certificate. This certificate will be used to setup a mTLS (mutual TLS) secured link between the two environments.
 +
-The next step is creating the link on the RHEL datacentre with the token. 
 
-. Navigate to the the *RHEL datacentre* terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
-
-. Create a new file on the **RHEL datacentre* where you will paste the token you just generated on the AWS cluster.
+. Transfer the generate link configuration to the remote rhel datacentre.
 +
 [source,bash,role=copy]
 ----
-vim secret_aws_vm.token
+scp aws-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skupper/namespaces/default/input/resources/
 ----
 
-. Paste the token in this file and save it using the buttons esc followed by :wq and hit enter to save the file 
-
-. Create a link on the  RHEL datacentre using the token
+. Type 'yes' and 'Enter the password of the RHEL datacentre when prompted
 +
+[source,bash,subs="attributes+"]
+----
+{aws-password}
+----
+
+. Since the link definition has now been transferred to the RHEL server, start the Virtual Application Network by running the command below from the RHEL terminal.
++ 
 [source,bash,role=copy]
 ----
-skupper link create secret_aws_vm.token --name aws-to-vm
+skupper system setup
 ----
+
+. Wait for a few seconds, and you should see the following output.
 +
 .Output
-----
-Site configured to link to skupper-inter-router-aws.apps.cluster-gqnbg.gqnbg.sandbox1039.opentlc.com:443 (name=aws-to-vm)
-Check the status of the link using 'skupper link status'.
-----
+----    
+Sources will be consumed from namespace "default"
+Site "datacentre" has been created on namespace "default"
+Platform: podman
+Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
+----  
 
-. Finally, you need to expose the database and payment-processor service over the link. This will allow the frontend app on the AWS cluster to connect to the database and payment-processor as if they were a local service, while in reality the services are a proxy for the real service running on the Datacentre.
-+
-[source,bash,role=copy]
-----
-skupper expose host host.containers.internal --address database --port 5432
-skupper expose host host.containers.internal --address payment-processor --port 8080 --protocol http
-----
 
-. Navigate back to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
-+
-image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
 
-.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project aws` command to log back into the aws namespace
-+
-image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
-
- 
-
-. Create proxy services on the *AWS terminal* that will redirect to the services running on the datacentre
-+
-[source,bash,role=copy]
-----
-skupper service create database 5432
-skupper service create payment-processor 8080 --protocol http
-----
-+
-You have now established a secure link between the two environments.
 
 . Now go to the browser tab where you've opened the patient-portal frontend or click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access it. 
 
@@ -441,34 +407,78 @@ Building a Service network between the two environments AWS and Azure  (more pre
 
 . Recollect that in this scenario the front end is connected to two instances of the payment-processor: one in the data centre (link already established ) and the other in the Azure cluster (connection yet to be established). Both these instances together are intended to provide HA for the payment-processor. i.e, if one goes down the other will seamlessly take over. 
 
+. For this scenario we will use the Service Interconnect OpenShift Plugin. This is another way to create your Virtual application network using a Graphical User Interface right from the OpenShift Console.
+
 === Initialize Red Hat Service Interconnect in the Azure cluster
 
-. Open the browser window pointing to the OpenShift Console of the Azure OpenShift cluster. Click on the openshift command line terminal on the top menu to open a terminal window.
-+
-image::images/azure_terminal_icon.png[azure_terminal_icon, role="integr8ly-img-responsive"]
+. Open the browser window pointing to the OpenShift Console of the Azure OpenShift cluster link:{azure-console}/topology/ns/azure[Azure Developer Console, window="_blank"]. 
 
-. The terminal should take two to three minutes to start up. Once done you should see something like this
-+
-image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
+. Login with username `{user-username}` and password `{aws-password}`
 
-. Make sure the terminal is logged into the azure project
+. Navigate to Home → Projects → azure, if you are not already in the azure project.
 +
-[source,bash,role=copy]
-----
-oc project azure
-----
-+
-.Output
-----
-Now using project "azure" on server "https://172.30.0.1:443"
-----
+image::images/azure_project.png[azure_project, role="integr8ly-img-responsive"]
 
-. Initialize the Service Interconnect Router by issuing the below command in the azure terminal. This should install the Service Interconnect resources in the azure namespace
+. From the azure project, click on the Service Interconnect tab.
 +
-[source,bash,role=copy]
-----
-skupper init
-----
+image::images/service_interconnect_tab.png[service_interconnect, role="integr8ly-img-responsive"]
+
+. Click on Create site and create a new site with the default values.
++
+image::images/create_site.png[]
+
+. Next let's create a connector to the payment-processor in the Azure cluster, so that the corresponding listener on the aws cluster can connect to it. Click on the Connector tab and Click the create a connector button.
+
++
+image::images/connector_tab_azure.png[]
+
+. Add a connector with the below values and hit submit.
++
+.. Name: payment-processor
+.. Port: 8080
+.. Routing key: payment-processor
+.. Selector: deployment=patient-portal-payment-processor
++
+image::images/connector_wizard.png[]
+
+
+
+. Now go back to the  link:{openshift-host}/k8s/cluster/projects/azure/openshift-site-plugin[OpenShift cluster on AWS, window="_blank"] and generate a token , that the azure cluster can use to set up a virtual application network. Click on the Generate a token button.
++
+image::images/token_gen_azure.png[]
+
+. You are presented with the Issue Access Token wizard. In the Configuration step, enter the following values, and click the Create button.
++
+.. FileName: aws-azure-token
+.. Redemptions: 1
+.. Valid for: 60 min
+.. Leave the rest of the values blank
++
+image::images/token_create_wizard.png[]
+
+. You will be presented with the Create token - How to step. Click on the `Download the access token` link. Once the token is downloaded, click on the Done button. 
++
+image::images/download_token.png[]
+
+. Go back to the link:{azure-console}/k8s/cluster/projects/azure/openshift-site-plugin[OpenShift cluster on Azure, window="_blank"] and click on the Links tab.
++
+image::images/link_azure_tab.png[]
+
+. Click on the Redeem Access Token button.
++
+image::images/Redeem_access_token.png[]
+
+. Click next and upload the token you just downloaded.
++
+image::images/token_upload_azure.png[]
+
+. The link should be ready in a few seconds.
++
+image::images/aws_azure_link_ready.png[]
+
+
+
+
 
 === Create a link between the namespace on AWS and Azure cluster
 
@@ -484,91 +494,15 @@ image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
 
 
-. Issue the following command
-+
-[source,bash,role=copy]
-----
-skupper token create secret_aws_azure.token
-----
-+
-.Output
-----
-Token written to secret_aws_azure.token
-----
 
-. Display the token using the below command and copy it in a notepad or any text editor of your choice
-+
-[source,bash,role=copy]
-----
-cat secret_aws_azure.token
-----
-+
-.Output
-----
-apiVersion: v1
-data:
-  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURMRENDQWhTZ0F3SUJBZ0lRU3RqbXd4Z2dOVWtkZnhOa1RManYxakFOQmdrcWhraUc5dzBCQVFzRkFEQWEKTVJnd0ZnWURWUVFERXc5emEzVndjR1Z5TFhOcGRHVXRZMkV3SGhjTk1qTXdPREV5TURnek16UXdXaGNOTWpndwpPREV3TURnek16UXdXakFhTVJnd0ZnWURWUVFERXc5emEzVndjR1Z5TFhOcGRHVXRZMkV3Z2dFaU1BMEdDU3FHClNJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUM1ZktmWHlEeEg5Q0lHNUdpbU5Ob29heGl4UGIwWkNyMVUKM2J1c1lMQm5HZmZ3MEZQMEVPeUsrTVQyWEptOXdiVkNNY2tQOFp6UjFKRFZoeWpBK3AxRDlWQjRCeHpHYkVGQwp2aXhJOFcvUWdMRk85L1Q3RnN4czNUMmprTExTSVBlRDA2ZVJvQm9oMnpwNzZRV3JMVVdwZlJTNmtobG11NEpOCkJhRWdnTWpXMlhZQVh4YithWWI0ZWdTZSt4SUFXZG5UM2JjTExSQkw2dHY2MDVTdnhLeTVVSXVBRjFLTU5oeEoKbDFOd2xqd0p5ZVFwZzlWcEl2bzduUWlYNFM3Nm0rRHN0MUU5U3k5NUNQNEcrYy96bWJzZjk0TlJaWWlwQ29FeQo3KzNxOVJNSU5NZVY4VEdINEFVMHgxRGhiMWJ1RmxLTGJRR3RENjAyd2Rqa2ViSWVjcGRmQWdNQkFBR2piakJzCk1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXcKRHdZRFZSMFRBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVWGdqMGxHK0o0cVVWY1JQK29aWlE3bHVXRUFJdwpDd1lEVlIwUkJBUXdBb0lBTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFDRndxZXFpZWt1UDJFNUVWVVJzbi9tCnBVZFZKbUJKWTd2cTJjdm1KaVdSYlF6dEZEY3diUUlKdHArN0I2TGRQVGpBYkNUYU5MTEl6aUNhZlkrS1ZkeW4KR09RWmRlWHlvOWlzdnhJL1hOSzVLY28zbXN0VDRObXd3MWhRVVBvVGd6UUFNWURlNk0wcjRqa3MzbVhreHlwZgozdDdWalF2cUIxd044RFZ2cHc5RytQbllCK1ZiamEvMkZVSks2YkJudmdlL0ZPL08yTm5GeTdJUU1FYXpFdVZ4Ck8rcEFsNlFTSFlQYkpocko1YlBIa1lCSng2MFVSMEVjSVhXMGZWU21SWXplMmE4R05vZ016WDZWNVZtZ1JyL2sKU09KU0Z1WU1oMmh6R1oxdldQVTZ6YWhMeVlXUUFvZWNzVTNiaFpjVEFJdFk3OU9WaE1LbGswY1B3UTdGVHZ3QwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
-  password: UFZIZjhCRnJvdDVJaWFlcXlZVm5zTm14
-kind: Secret
-metadata:
-  annotations:
-    skupper.io/generated-by: 87c49ffc-6440-4261-9270-d5831c6e1725
-    skupper.io/site-version: 1.4.1
-    skupper.io/url: https://claims-aws.apps.cluster-gqnbg.gqnbg.sandbox1039.opentlc.com:443/789cb2df-3907-11ee-910f-0a580a800150
-  creationTimestamp: null
-  labels:
-    skupper.io/type: token-claim
-  name: 789cb2df-3907-11ee-910f-0a580a800150
-----
-+
-[NOTE]
-====
-Do not copy the token from the instructions. Copy the token from the terminal. 
-====
-+
-This is actually an OpenShift secret which contains a certificate. This certificate will be used to setup a mTLS (mutual TLS) secured link between the two environments.
-+
 The next step is creating the link on the Azure cluster with the token. 
 
-. Navigate to the *Azure terminal*
-+
-image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
-
-.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project azure` command to log back into the azure namespace
-+
-image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
 
 
 
-. Create a new file on the *Azure cluster* where you will paste the token you just generated on the AWS cluster.
-+
-[source,bash,role=copy]
-----
-vi secret_aws_azure.token
-----
 
-. Paste the token in this file and save it using the buttons esc followed by :wq and hit enter to save the file 
 
-. Create a link on the  *Azure cluster* using the token
-+
-[source,bash,role=copy]
-----
-skupper link create secret_aws_azure.token --name aws-to-azure
-----
-+
-.Output
-----
-Site configured to link to https://claims-aws.apps.cluster-gqnbg.gqnbg.sandbox1039.opentlc.com:443/789cb2df-3907-11ee-910f-0a580a800150 (name=aws-to-azure)
-Check the status of the link using 'skupper link status'.
-----
 
-. Finally, you need to expose the payment-processor service over the link. Issue the below command in *Azure terminal* .This will allow the frontend app to connect to the payment-processor on *Azure*.
-+
-[source,bash,role=copy]
-----
-skupper expose deployment/patient-portal-payment-processor --address payment-processor --port 8080 --protocol http
-----
-+
 Now we have two payment-processors one in the datacentre and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests or if it goes down the payment-processor in the Azure datacentre will seamlessly take over.
 +
 image::images/processor_down_arch.png[processor_down_arch, role="integr8ly-img-responsive"]
@@ -599,7 +533,32 @@ image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"
 +
 [source,bash,role=copy]
 ----
-skupper unexpose host host.containers.internal --address payment-processor 
+skupper connector delete payment-processor
+----
+
+
+. Reload the site
+[source,bash,role=copy]
+----
+skupper system reload
+----
++
+
+.Output
+----
+Sources will be consumed from namespace "default"
+2025/07/07 05:15:53 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/tls.crt
+2025/07/07 05:15:53 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/tls.key
+2025/07/07 05:15:53 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/ca.crt
+2025/07/07 05:15:53 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/tls.key
+2025/07/07 05:15:53 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/ca.crt
+2025/07/07 05:15:53 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/tls.crt
+2025/07/07 05:15:54 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/tls.crt
+2025/07/07 05:15:54 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/tls.key
+2025/07/07 05:15:54 WARN certificate will not be overwritten path=/home/lab-user/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/ca.crt
+Site "datacentre" has been created on namespace "default"
+Platform: podman
+Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----
 
 . Go back to the patient portal or Click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access the patient portal.
@@ -682,47 +641,10 @@ image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-res
 +
 [source,bash,role=copy]
 ----
-skupper token create secret_azure_vm.token
+skupper link generate > azure-rhel-link.yaml
 ----
 +
-.Output
-----
-Token written to secret_azure_vm.token 
-----
-
-. Display the token using the below command and copy it in a notepad or nay text editor of your choice
-+
-[source,bash,role=copy]
-----
-cat secret_azure_vm.token
-----
-+
-.Output
-----
-apiVersion: v1
-data:
-  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURMVENDQWhXZ0F3SUJBZ0lSQU5PeVBabytJT1RUeW9xVUt2Y09sRGt3RFFZSktvWklodmNOQVFFTEJRQXcKR2pFWU1CWUdBMVVFQXhNUGMydDFjSEJsY2kxemFYUmxMV05oTUI0WERUSXpNRGd4TlRBMk1EY3dObG9YRFRJNApNRGd4TXpBMk1EY3dObG93R2pFWU1CWUdBMVVFQXhNUGMydDFjSEJsY2kxemFYUmxMV05oTUlJQklqQU5CZ2txCmhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBeU5xR0tsTWZ6QnFtZnhTdkx4TEVqOXZJbEVRZGdURWUKQVI3RDVCSmhqN08wZlF3VXpWR1V6bDJzUmRjWHFxL0VqbUY4bDd5bWd3T2JiSGxieFFNdE5sc3dXOFdWSW9EYQpvMzYraU8yRzhoMWVEdTdTQ0F2Skh4ajBmWEVkeTkyRmZWb0FRdWNWTnp6NzdPRVFFRk1rK3l4Q0xOWXBxTmVjCjlhRVZ1bERmakRjd2NmU05EcURNc2VDTGhVNTd4MmRDd1lpVHFHUjBqMGdRTUQzbFc2dENNTWVBamQ3QUVjT0UKdVZJUkd4eUtJRHE1NnBESEVKNkIzM0NDbkJCeG5CMnhQcHpQOW1vRmhrNnRtc0UzWnpGdTd3MzQzMGh2aW5SVgpzckdiTHFnVnFWZldQMnE3VkJFWTRnNG9ZbEhJYjdwWURRV0RHZDhLeTdsU3dkTGFWWXNialFJREFRQUJvMjR3CmJEQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUMKTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRkxpTkZLYUJwYm9MVjVyZXJRWHVWS0UzVTZDTApNQXNHQTFVZEVRUUVNQUtDQURBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQUREbVNrNEJNMW5YZzZDdjh0MnRuCnhOKzhXV0k5U0NEYjA5ZGRFZjZ3K2hJOWh1RnJTRDJ0Vktvc2hXbXEyelFOaVR3Z2tHampFK2ZRenRPaTFtVHYKd1ZXVldUcGREMmxYdlBvOFJZWEJmU0hEeTdMRUt6Y1ZlUmdFTUdWdWN1QjVXREFOeE9Cc055MXRjOHpuZ0tsOQpBTTRyZk44UjUzcERlMzZ1Mi9qQkgzaXk1Y0ovM2NOckJxWGVEc3ZyZGVCSGVlaVNRYUM1UWtFTUhLR1JYclY4Cng3SUczVWpPbUpacEZ0ODVXb3Q5Tjg2TDZDckFVd25HTWo1bXhpeG82dmFFbkRmejVjRzBEYnFPNnQ5TWh1L00KNWlEZDlLd1o1YTIrVE9qQjBKWWNuMUw4bVEvS1hlalhpOG9USDZEMGxqSjFxM0d1UkZ0UGtMT0VSalI2Q3AycwpPZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
-  password: ZmRCUUNUMGFxakxMd01MTXhVbWp5dzE1
-kind: Secret
-metadata:
-  annotations:
-    skupper.io/generated-by: 7c263c46-188b-4e8d-ac4e-e66a649daedc
-    skupper.io/site-version: 1.4.1
-    skupper.io/url: https://claims-azure.apps.azure-7vb2h-1.7vb2h-1.sandbox3176.opentlc.com:443/8cbee1b2-3b37-11ee-becd-0a580a800097
-  creationTimestamp: null
-  labels:
-    skupper.io/type: token-claim
-  name: 8cbee1b2-3b37-11ee-becd-0a580a800097
-----
-+
-[NOTE]
-====
-Do not copy the token from the instructions. Copy the token from the terminal. 
-====
-+
-This is actually an OpenShift secret which contains a certificate. This certificate will be used to setup a mTLS (mutual TLS) secured link between the two environments.
-+
-The next step is creating the link on the RHEL datacentre with the token. 
+The next step is creating the link on the RHEL datacentre with this. 
 
 . Navigate to the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
@@ -730,23 +652,31 @@ The next step is creating the link on the RHEL datacentre with the token.
 +
 [source,bash,role=copy]
 ----
-vim secret_azure_vm.token
+scp azure-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skupper/namespaces/default/input/resources/
 ----
 
-. Paste the token in this file and save it using the buttons esc followed by :wq and hit enter to save the file 
-
-. Create a link on the  *RHEL datacentre* using the token
+. Type 'yes' and 'Enter the password of the RHEL datacentre when prompted
 +
+[source,bash,subs="attributes+"]
+----
+{aws-password}
+----
+
+. Since the link definition has now been transferred to the RHEL server, reload the Virtual Application Network by running the command below from the RHEL terminal.
++ 
 [source,bash,role=copy]
 ----
-skupper link create secret_azure_vm.token --name azure-to-vm
+skupper system reload
 ----
+
+. Wait for a few seconds, and you should see the following output.
 +
 .Output
-----
-Site configured to link to skupper-inter-router-azure.apps.azure-7vb2h-1.7vb2h-1.sandbox3176.opentlc.com:443 (name=azure-to-vm)
-Check the status of the link using 'skupper link status'.
-----
+----    
+
+----  
+
+
 
 
 
@@ -767,29 +697,15 @@ image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-res
 +
 [source,bash,role=copy]
 ----
-skupper link delete aws-to-azure
+skupper link delete aws-azure-token
 ----
 +
 .Output
 ----
-Link 'aws-to-azure' has been removed
+Link 'aws-to-azure' is deleted
 ----
 
-. Check the status of the skupper network
-+
-[source,bash,role=copy]
-----
-skupper status
-----
 
-. You should see an output similar to the one below
-+
-[source,bash,role=copy]
-----
-Skupper is enabled for namespace "azure" in interior mode. It is connected to 2 other sites (1 indirectly). It has 2 exposed services.
-----
-
-. Examine the output carefully. You will notice that the output indicates that Azure is to connected 2 sites but **1 amongst the connections is indirect** . This indicates that Azure is connected to AWS indirectly. 
 
 . To verify if the connection, works properly lets try to make payment for another patient. Click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access the patient portal.
 
