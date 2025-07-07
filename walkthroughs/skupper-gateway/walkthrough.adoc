@@ -154,11 +154,11 @@ Building a Service network between the two environments OpenShift and RHEL datac
 
 . Install Service Interconnect router in both environments.
 
-. Create a connection token in the openshift cluster.
+. Create a link configuration including a secure token in the openshift cluster and transfer it to the datacentre.
 
-. Use the token on the datacentre to create a link between the namespaces of openshift cluster and the services running in the datacentre.
+. Use the link yaml on the datacentre to create a link between the namespaces of openshift cluster and the services running in the datacentre.
 
-. Expose services of one environment on the other. In this case, you will expose the  database and payment-processor on the datacentre, so that the frontend can connect to it as if they were locally deployed.
+. Expose services of one environment on the other using the connectors and corresponding listeners. In this case, you will create connectors for the  database and payment-processor on the datacentre, and corresponding listeners on the openshift cluster. This way the listeners on the openshift cluster can connect to the frontend as if the services were locally deployed. it as if they were locally deployed.
 
 === Initialize Red Hat Service Interconnect in the AWS cluster
 
@@ -184,12 +184,22 @@ oc project aws
 Now using project "aws" on server "https://172.30.0.1:443"
 ----
 
-. Initialize the Service Interconnect Router by issuing the below command in the aws terminal. This should install the Service Interconnect resources in the aws namespace
+. Initialize the Service Interconnect site by issuing the below command in the aws terminal. This should install the Service Interconnect resources in the aws namespace
 +
 [source,bash,role=copy]
 ----
 skupper site create aws --enable-link-access
 ----
++
+> **What is a site?**  
+> A site represents a place where you have real running workloads. Each site contains an application service router which helps its workloads connect with workloads in remote sites.  
+> *Ex: A namespace is a site*
++
+> **What is a router?**  
+> Layer 7 application routers form the backbone of a VAN in the same way that conventional network routers form the backbone of a VPN.  
+> However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application addresses).
+
+
 
 === Initialize Red Hat Service Interconnect in the RHEL Datacentre
 
@@ -218,7 +228,14 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 
 
-=== Create a link between the namespace on OpenShift cluster and the RHEL datacenter
+=== Setup a listener on the OpenShift cluster and the RHEL datacenter
+> **What is a Listener?**  
+> A listener creates a local connection point that links to connectors in remote sites using routing keys.  
+> On Kubernetes, it’s implemented as a Service; on Docker, Podman, and Linux, it’s a listening socket on a local network interface.  
+> The listener exposes a host/port for local clients while using the routing key to connect with remote sites.
+
+
+
 
 . First setup the listener in the AWS cluster.
 +
@@ -236,7 +253,19 @@ Waiting for create to complete...
 Listener "payment-processor" is configured.
 ----
 
-. Next setup the Corresponding connectors in the RHEL datacentre.
+
+=== Setup a Connectors on the the RHEL datacenter
+
+> **What is a Connector?**  
+> A connector links a local workload to listeners in remote sites using routing keys.  
+> On Kubernetes, it typically uses a pod selector; on Docker, Podman, and Linux, it uses host and port specifications.  
+> The routing key is a string identifier that binds the connector to matching listeners in remote sites.
+
+image::images/connector_image.png[listener, role="integr8ly-img-responsive"]
+
+
+
+. Setup the Corresponding connectors in the RHEL datacentre.
 +
 [source,bash,role=copy]
 ----
@@ -250,7 +279,17 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 File written to /home/lab-user/.local/share/skupper/namespaces/default/input/resources/Connector-payment-processor.yaml
 ----
 
-To create a link between the environments, you create a token on one of the environments, and then use the token to create the link on the other.
+
+=== Setup a link between the two environments using the link resource
+
+> **What is a Link?**  
+> A Link resource specifies remote connection endpoints and TLS credentials for establishing a mutual TLS connection to a remote site.  
+> To create an active link, the remote site must first enable link access.  
+> Link access provides an external access point for accepting links.
+
+
+
+To create a link between the environments, you create a link configuration on one of the environments, and then transfer it to create the link on the other.
 
 
 
@@ -272,7 +311,7 @@ skupper link generate > aws-rhel-link.yaml
 ----
 
 
-. Feel free toExamine the token using the below command
+. Feel free to examine the link configuration using the below command
 +
 [source,bash,role=copy]
 ----
@@ -280,11 +319,7 @@ cat aws-rhel-link.yaml
 ----
 
 
-+
-This is actually an OpenShift secret which contains a certificate. This certificate will be used to setup a mTLS (mutual TLS) secured link between the two environments.
-+
-
-. Transfer the generate link configuration to the remote rhel datacentre.
+. Transfer the generated link configuration to the remote rhel datacentre.
 +
 [source,bash,role=copy]
 ----
@@ -315,8 +350,18 @@ Platform: podman
 Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----  
 
+. From the OpenShift AWS Terminal (upper terminal), run the following command to deploy the {rhsi} Network Console.
++
+[source,bash,role=copy]
+----
+oc apply -f https://raw.githubusercontent.com/RedHat-Middleware-Workshops/service-interconnect-lab-instructions/refs/heads/main/install.sh/network_console_deploy.yaml -n aws
+----
+
+You will use this console to visualize the network later. Since it takes a few seconds to initialize, go ahead and deploy it now. While it is getting deployed, proceed to the next steps to save time.
 
 
+
+=== Testing the Virtual Application Network
 
 . Now go to the browser tab where you've opened the patient-portal frontend or click this link:https://patient-portal-frontend-aws.{aws-subdomain}[link, window="_blank"] to access it. 
 
@@ -344,6 +389,12 @@ image::images/payment_button.png[payment_button, role="integr8ly-img-responsive"
 . You should be able to see there is now a Date Paid and the processor location value indicating that the payment is successful. The **Processor** column also shows the location of the payment-portal. This shows that we have successfully connected our payment-processor to the application using Red Hat Service Interconnect.
 +
 image::images/payment-success.png[payment-success, role="integr8ly-img-responsive"]
+
+. Navigate to the network console to visualize the network.
++
+
+
+
 
 Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between services on two different environments (OpenShift Cluster and RHEL Datacentre) and allowed application to connect and communicate over the secure network.
 
@@ -411,7 +462,7 @@ Building a Service network between the two environments AWS and Azure  (more pre
 
 === Initialize Red Hat Service Interconnect in the Azure cluster
 
-. Open the browser window pointing to the OpenShift Console of the Azure OpenShift cluster link:{azure-console}/topology/ns/azure[Azure Developer Console, window="_blank"]. 
+. Open the browser window pointing to the  link:{azure-console}/topology/ns/azure[OpenShift Console of the Azure OpenShift cluster, window="_blank"]. 
 
 . Login with username `{user-username}` and password `{aws-password}`
 
