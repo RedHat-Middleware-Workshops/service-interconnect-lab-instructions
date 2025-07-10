@@ -193,15 +193,19 @@ Now using project "aws" on server "https://172.30.0.1:443"
 skupper site create aws --enable-link-access
 ----
 +
-.*What is a site?*
+[NOTE]
 ====
+*What is a site?*
+
 A site represents a place where you have real running workloads. Each site contains an application service router which helps its workloads connect with workloads in remote sites.
 
 _Ex: A namespace is a site_
 ====
 +
-.*What is a router?*
+[NOTE]
 ====
+*What is a router?*
+
 Layer 7 application routers form the backbone of a VAN in the same way that conventional network routers form the backbone. 
 
 However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application addresses).
@@ -239,8 +243,10 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 === Setup a listener on the OpenShift cluster and the RHEL datacenter
 
-.*What is a Listener?*
+[NOTE]
 ====
+*What is a Listener?*
+
 A listener creates a local connection point that links to connectors in remote sites using routing keys.  
 
 On Kubernetes, it’s implemented as a Service; on Docker, Podman, and Linux, it’s a listening socket on a local network interface.  
@@ -270,8 +276,10 @@ Listener "payment-processor" is configured.
 
 === Setup a Connectors on the the RHEL datacenter
 
-.*What is a Connector?*
+[NOTE]
 ====
+*What is a Connector?*
+
 A connector links a local workload to listeners in remote sites using routing keys.
 
 On Kubernetes, it typically uses a pod selector; on Docker, Podman, and Linux, it uses host and port specifications. 
@@ -300,11 +308,12 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 === Setup a link between the two environments using the link resource
 
-> ****  
-> 
 
-.*What is a Link?*
+
+[NOTE]
 ====
+*What is a Link?*
+
 A Link resource specifies remote connection endpoints and TLS credentials for establishing a mutual TLS connection to a remote site.  
 
 To create an active link, the remote site must first enable link access.  
@@ -375,7 +384,7 @@ Platform: podman
 Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----  
 
-. From the OpenShift AWS Terminal (upper terminal), run the following command to deploy the Service Network Console.
+. From the OpenShift AWS Terminal, run the following command to deploy the Service Interconnect Network ObserverConsole.
 +
 [source,bash,role=copy]
 ----
@@ -492,15 +501,18 @@ Building a Service network between the two environments AWS and Azure  (more pre
 
 . Create a connection token in the AWS cluster.
 
-. Use the token on the Azure to create a link between the namespaces of openshift clusters.
-
-. Note: We have the link resource in the previous example and the token in this example. Both are essentially an equivalent way to create the link and even when you examine both the link and token resource you will see that they both contain the tls certificate/credentials information to establish the network
+. Upload the token on the Azure cluster to create a link between the namespaces of openshift clusters.
++
+[NOTE]
+====
+We have used the link resource in the previous example and the token in this example. Both are essentially an equivalent way to create the link and even when you examine both the link and token resource you will see that they both contain the tls certificate/credentials information to establish the network
+====
 
 . Expose services of one environment on the other. In this case, you will expose the  payment-processor on Azure, so that the frontend can connect to it as if they were locally deployed. 
 
 . Recollect that in this scenario the front end will be connected to two instances of the payment-processor: one in the data centre (link already established ) and the other in the Azure cluster (connection yet to be established). Both these instances together are intended to provide HA for the payment-processor. i.e, if one goes down the other will seamlessly take over. 
 
-. For this scenario we will use the Service Interconnect OpenShift Plugin. This is another way to create your Virtual application network using a Graphical User Interface right from the OpenShift Console.
+. For this scenario we will use the Service Interconnect OpenShift Plugin. This is another way to create your Virtual Application Network using a Graphical User Interface right from the OpenShift Console.
 
 === Initialize Red Hat Service Interconnect in the Azure cluster
 
@@ -545,11 +557,13 @@ image::images/connector_wizard.png[]
 +
 image::images/token_gen_azure.png[]
 +
-.*What is an Access Token?*
+[NOTE]
 ====
+*What is an Access Token?*
+
 An access token is a short-lived credential for creating a link between sites. It contains a URL and secret code from an access grant. Tokens have limited validity - by default, they can be used only once and expire after 15 minutes.
 
-What is an Access Grant?
+*What is an Access Grant?*
 A site wishing to accept a link (site 1) creates an access grant. It uses the access grant to issue a corresponding access token and transfers it to a remote site (site 2). Site 2 submits the access token to site 1 for redemption. If the token is valid, site 1 sends site 2 the TLS host, port, and credentials required to create a link to site 1
 
 This image explains this concept in more detail.
@@ -561,7 +575,7 @@ image::images/token_redemption.png[]
 +
 .. FileName: `aws-azure`
 .. Redemptions: `1`
-.. Valid for: `60`` min
+.. Valid for: `60` min
 .. Leave the rest of the values blank and click create
 +
 image::images/token_create_wizard.png[]
@@ -586,15 +600,33 @@ image::images/token_upload_azure.png[]
 +
 image::images/aws_azure_link_ready.png[]
 
+== Testing the Workload load-balancing by Red Hat Service Interconnect
+
+Now we have two payment-processors one in the datacentre and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests, Service Interconnect automatically load balances request across the two instances. Let's test this out using a simple load balancer app that we will deploy on the AWS cluster. This app will help us visualize the load balancing happening between the two instances of the payment-processor.
+
+. From the *AWS terminal* deploy the simple load balancer app.
++
+[source,bash,role=copy]
+----
+oc apply -f https://raw.githubusercontent.com/rpscodes/patient_portal_load_observer/refs/heads/main/Deployment/load-balancer-deployment.yaml -n aws
+----
+
+. Give a few seconds for the deployment to complete.
+
+. Navigate to the link:https://loadbalancer-app-aws{openshift-host}[Load balancer app, window="_blank"] and click on start load test.
++
+image::images/load_balancer_app_start_load_test.png[]
+
+. In a few seconds you should see the traffic distribution chart and data indication how Red Hat Service Interconnect is balancing the traffic between the two instances of the payment-processor.
++
+image::images/load_balancer_charts.png[]
 
 
 
 
 === Testing Workload Failover
 
-
-
-Now we have two payment-processors one in the datacentre and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests or if it goes down the payment-processor in the Azure datacentre will seamlessly take over.
+Next let's test failover. If the payment-processor in the datacentre goes down the payment-processor in the Azure cluster should seamlessly take over. Service Interconnect automatically detects the failover and routes the requests to the payment-processor in the Azure cluster. Let's test it out
 
 image::images/processor_down_arch.png[processor_down_arch, role="integr8ly-img-responsive"]
 
@@ -620,7 +652,7 @@ image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"
 
 . Navigate to the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
-. Instead of killing the container running the payment-processor in the datacentre, let's just unexpose it over the network and make it unaccessible. Run the below command in the terminal of RHEL datacentre
+. Instead of killing the container running the payment-processor in the datacentre, let's just delete the connector and make it unaccessible. Run the below command in the terminal of RHEL datacentre
 +
 [source,bash,role=copy]
 ----
@@ -710,9 +742,9 @@ image::images/network_down_arch.png[network_down_arch, role="integr8ly-img-respo
 
 To replicate the above scenario we will do the following steps:
 
-. Create a direct skupper network connection between RHEL datacentre and Azure
+. Create a alternate skupper network connection between RHEL datacentre and Azure
 . Delete the direct connection between AWS and Azure
-. Verify if the patient portal on AWS is able to access the payment processor on Azure using the alternate path(AWS --> Datacentre --> Azure) in the absence of a direct path. 
+. Verify if the patient portal on AWS is able to access the payment processor on Azure using the alternate path(AWS -> Datacentre -> Azure) in the absence of a direct path. 
 . Note: Recollect that in the previous scenario we have taken down the payment processor in the RHEL datacentre. So the only instance currently available is the one in the Azure cluster. 
 
 image::images/alt_route_no_arrow.png[alt_route_no_arrow, role="integr8ly-img-responsive"]
@@ -722,16 +754,18 @@ image::images/alt_route_no_arrow.png[alt_route_no_arrow, role="integr8ly-img-res
 
 Since we have already initialized the Service Interconnect router in the azure namespace in the Azure cluster in the previous scenario and the RHEL datacentre, we do not need to repeat that step. We just need to create a token in the Azure environment that would be used by the Datacentre
 
-. Navigate to the *Azure terminal*
+. Navigate to the temrinal on the *Azure cluster* and start the terminal session.
 +
-image::images/azure_terminal_started.png[azure_terminal_started, role="integr8ly-img-responsive"]
+image::images/azure-terminal.png[]
 
-
-.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and issue the `oc project azure` command to log back into the azure namespace
+. Login to the azure project
 +
-image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
+[source,bash,role=copy]
+----
+oc project azure
+----
 
-. Issue the following command
+. Issue the following command to generate the link yaml
 +
 [source,bash,role=copy]
 ----
