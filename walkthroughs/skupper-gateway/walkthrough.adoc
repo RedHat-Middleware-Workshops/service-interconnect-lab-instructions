@@ -367,7 +367,7 @@ scp aws-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skup
 {aws-password}
 ----
 
-. Since the link definition has now been transferred to the RHEL server, start the Virtual Application Network by running the command below from the *RHEL terminal*.
+. Since the link definition has now been transferred to the RHEL server, start the Virtual Application Network. Navigate to the *RHEL terminal* and run the command below from the .
 + 
 [source,bash,role=copy]
 ----
@@ -490,7 +490,7 @@ image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integ
 +
 *password:* `{aws-password}`
 
-. Double check to make sure you are in the azure namespace and expect to see payment-processor deployed. 
+. Double check to make sure you are in the azure namespace and expect to see another instance of the*payment-processor* deployed. 
 +
 image::images/azure_topology.png[azure_topology, role="integr8ly-img-responsive"]
 
@@ -520,7 +520,7 @@ We have used the link resource in the previous example and the token in this exa
 
 . Login with username `{user-username}` and password `{aws-password}`
 
-. Navigate to Home → Projects → azure, if you are not already in the azure project.
+. Navigate to Home → Projects → azure.
 +
 image::images/azure_project.png[azure_project, role="integr8ly-img-responsive"]
 
@@ -596,9 +596,13 @@ image::images/Redeem_access_token.png[]
 +
 image::images/token_upload_azure.png[]
 
-. Click Done.The link should be ready in a few seconds.
+. Click Done. The link should be ready in a few seconds.
 +
 image::images/aws_azure_link_ready.png[]
+
+. The Azure cluster is now a part of the Virtual Application Network enabled by Red Hat Service Interconnect. You can double check by navigating to the https://skupper-network-observer-aws.{aws-subdomain}[network console, window="network-observer"] and confirm that the azure cluster is now a part of the network.
++
+image::images/azure_aws_rhel_network_observer.png[]
 
 === Testing the Workload load-balancing by Red Hat Service Interconnect
 
@@ -648,11 +652,11 @@ image::images/jim_submit.png[jim_submit, role="integr8ly-img-responsive"]
 +
 image::images/jim_datacentre.png[jim_datacentre, role="integr8ly-img-responsive"]
 
-. Now let's take down the payment-processor in the datacentre and see if the one in the Azure cluster takes over.  
+. Now let's take down the payment-processor in the datacenter and see if the one in the Azure cluster takes over.  
 
-. Navigate to the RHEL datacentre terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
+. Navigate to the RHEL datacenter terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as lab-user@bastion
 
-. Instead of killing the container running the payment-processor in the datacentre, let's just delete the connector and make it unaccessible. Run the below command in the terminal of RHEL datacentre
+. Instead of killing the container running the payment-processor in the datacentre, let's just delete the connector and make it unaccessible. Run the below command in the *terminal of RHEL datacenter*
 +
 [source,bash,role=copy]
 ----
@@ -660,7 +664,7 @@ skupper connector delete payment-processor
 ----
 
 
-. Reload the site
+. Run the below command to from the *RHEL terminal* to reload the site
 +
 [source,bash,role=copy]
 ----
@@ -754,11 +758,11 @@ image::images/alt_route_no_arrow.png[alt_route_no_arrow, role="integr8ly-img-res
 
 Since we have already initialized the Service Interconnect router in the azure namespace in the Azure cluster in the previous scenario and the RHEL datacentre, we do not need to repeat that step. We just need to create a token in the Azure environment that would be used by the Datacentre
 
-. Navigate to the temrinal on the *Azure cluster* and start the terminal session.
+. Navigate to the link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="azure-console"] and start the terminal session.
 +
-image::images/azure-terminal.png[]
+image::images/azure_terminal_icon.png[]
 
-. Login to the azure project
+. From the *azure terminal*, issue the following command to the use the azure project
 +
 [source,bash,role=copy]
 ----
@@ -790,7 +794,9 @@ scp azure-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/sk
 {aws-password}
 ----
 
-. Since the link definition has now been transferred to the RHEL server, reload the Virtual Application Network by running the command below from the *RHEL terminal*.
+. Since the link definition has now been transferred to the RHEL server, reload the Virtual Application Network 
+
+. From the *RHEL terminal*, reload the Virtual Application Network by running the command below.
 + 
 [source,bash,role=copy]
 ----
