@@ -101,7 +101,7 @@ The following steps will showcase how you can connect the frontend to services(d
 +
 *password:* `{aws-password}`
 
-. Double check to make sure you are in the aws namespace and expect to see frontend (called patient-portal-frontend) deployed. 
+. Double check to make sure you are in the *aws* namespace and expect to see frontend (called patient-portal-frontend) deployed. 
 +
 image::images/aws_topology.png[aws_topology, role="integr8ly-img-responsive"]
 
@@ -166,7 +166,7 @@ Building a Service network between the two environments OpenShift and RHEL datac
 
 The easiest way to initialize Red Hat Service Interconnect is through the skupper CLI (Skupper is the name of the open-source upstream project of Red Hat Service Interconnect). In this lab, the skupper cli is available through the OpenShift Command Line terminal, so that you don’t have to install it.
 
-. Open the browser window pointing to the OpenShift Console of the AWS OpenShift cluster. Click on the openshift command line terminal on the top menu to open a terminal window.
+. Open the browser window pointing to the Console of the AWS OpenShift cluster. Click on the openshift command line terminal icon on the top menu to open a terminal window.
 +
 image::images/aws_terminal_icon.png[aws_terminal_icon, role="integr8ly-img-responsive"]
 
@@ -186,7 +186,7 @@ oc project aws
 Now using project "aws" on server "https://172.30.0.1:443"
 ----
 
-. Initialize the Service Interconnect site by issuing the below command in the aws terminal. This should install the Service Interconnect resources in the aws namespace
+. Initialize the Service Interconnect site by issuing the below command in the *aws terminal*. This should install the Service Interconnect resources in the aws namespace
 +
 [source,bash,role=copy]
 ----
@@ -214,9 +214,9 @@ However, instead of routing IP packets between network endpoints, Layer 7 applic
 
 
 
-=== Initialize Red Hat Service Interconnect in the RHEL Datacentre
+=== Initialize Red Hat Service Interconnect in the RHEL Datacenter
 
-Go to the terminal on your local machine where you are logged in to the RHEL datacenter. The skupper cli is also available through the RHEL datacentre terminal that you have connected. 
+Go to the terminal on your local machine where you are logged in to the *RHEL datacenter*. The skupper cli is also available through the RHEL datacenter terminal that you have connected. 
 
 . Switch the skupper cli podman site mode as we will be using podman to run our skupper containers
 +
@@ -227,7 +227,7 @@ export SKUPPER_PLATFORM=podman
 
 
 
-. Initialize the Service Interconnect Router by issuing the below command in the RHEL datacentre terminal. 
+. Initialize the Service Interconnect Router by issuing the below command in the *RHEL datacenter terminal*. 
 +
 [source,bash,role=copy]
 ----
@@ -257,7 +257,7 @@ The listener exposes a host/port for local clients while using the routing key t
 
 
 
-. First setup the listener in the AWS cluster by running the below command on the terminal of your AWS OpenShift cluster
+. First setup the listener in the AWS cluster by running the below command on the terminal of your *AWS OpenShift cluster*
 +
 [source,bash,role=copy]
 ----
@@ -291,7 +291,7 @@ image::images/connector_image.png[listener, role="integr8ly-img-responsive"]
 
 
 
-. Setup the Corresponding connectors in the RHEL datacentre by running the below commands in the RHEL datacentre terminal.
+. Setup the Corresponding connectors in the RHEL datacentre by running the below commands in the *RHEL datacenter terminal*.
 +
 [source,bash,role=copy]
 ----
@@ -353,7 +353,7 @@ cat aws-rhel-link.yaml
 ----
 
 
-. Transfer the generated link configuration to the remote rhel datacentre. Run this command on the AWS cluster terminal
+. Transfer the generated link configuration to the remote rhel datacenter by running this command on the *AWS cluster terminal*
 +
 [source,bash,subs="attributes+"]
 ----
@@ -367,7 +367,7 @@ scp aws-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skup
 {aws-password}
 ----
 
-. Since the link definition has now been transferred to the RHEL server, start the Virtual Application Network by running the command below from the RHEL terminal.
+. Since the link definition has now been transferred to the RHEL server, start the Virtual Application Network by running the command below from the *RHEL terminal*.
 + 
 [source,bash,role=copy]
 ----
@@ -384,7 +384,7 @@ Platform: podman
 Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----  
 
-. From the OpenShift AWS Terminal, run the following command to deploy the Service Interconnect Network ObserverConsole.
+. From the *OpenShift AWS Terminal*, run the following command to deploy the Service Interconnect Network ObserverConsole.
 +
 [source,bash,role=copy]
 ----
@@ -445,7 +445,7 @@ image::images/network_traffic_observer.png[]
 
 
 
-Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between services on two different environments (OpenShift Cluster and RHEL Datacentre) and allowed application to connect and communicate over the secure network.
+Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between services on two different environments (OpenShift Cluster and RHEL Datacenter) and allowed application to connect and communicate over the secure network.
 
 image::images/single_app_arch.png[single_app_arch, role="integr8ly-img-responsive"]
 
@@ -478,7 +478,7 @@ Click **Next** to proceed to the next scenario.
 
 MediCorp decided to add scalability and resiliency by running additional Payment Processor instances on a new OpenShift cluster on Azure, while some instances of the payment-processor  as well as the database still remain in the data center.
 
-Azure provides certified EU data centres that adhere to regulatory requirements. Also at the same time the payment processor in the Azure cluster provides high availability and is expected to take over when the payment processor in the Datacentre goes down. In the next steps we will see how Red Hat Service interconnect enables this.
+Azure provides certified EU data centres that adhere to regulatory requirements. Also at the same time the payment processor in the Azure cluster provides high availability and is expected to take over when the payment processor in the Datacenter goes down. In the next steps we will see how Red Hat Service interconnect enables this.
 
 image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integr8ly-img-responsive"]
 
@@ -495,7 +495,7 @@ image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integ
 image::images/azure_topology.png[azure_topology, role="integr8ly-img-responsive"]
 
 === Connecting the frontend deployed on OpenShift in AWS to the other instance of the payment processor deployed on OpenShift in AWS
-Building a Service network between the two environments AWS and Azure  (more precisely between namespaces of the two OpenShift clusters.
+Building a Service network between the two environments AWS and Azure clusters (more precisely between namespaces of the two OpenShift clusters.)
 
 . Install Service Interconnect router in both environments.
 
@@ -512,7 +512,7 @@ We have used the link resource in the previous example and the token in this exa
 
 . Recollect that in this scenario the front end will be connected to two instances of the payment-processor: one in the data centre (link already established ) and the other in the Azure cluster (connection yet to be established). Both these instances together are intended to provide HA for the payment-processor. i.e, if one goes down the other will seamlessly take over. 
 
-. For this scenario we will use the Service Interconnect OpenShift Plugin. This is another way to create your Virtual Application Network using a Graphical User Interface right from the OpenShift Console.
+. For this scenario we will use the Service Interconnect OpenShift ConsolePlugin. This is another way to create your Virtual Application Network using a Graphical User Interface right from the OpenShift Console.
 
 === Initialize Red Hat Service Interconnect in the Azure cluster
 
@@ -600,9 +600,9 @@ image::images/token_upload_azure.png[]
 +
 image::images/aws_azure_link_ready.png[]
 
-== Testing the Workload load-balancing by Red Hat Service Interconnect
+=== Testing the Workload load-balancing by Red Hat Service Interconnect
 
-Now we have two payment-processors one in the datacentre and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests, Service Interconnect automatically load balances request across the two instances. Let's test this out using a simple load balancer app that we will deploy on the AWS cluster. This app will help us visualize the load balancing happening between the two instances of the payment-processor.
+Now we have two payment-processors one in the datacenter and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests, Service Interconnect automatically load balances request across the two instances. Let's test this out using a simple load balancer app that we will deploy on the AWS cluster. This app will help us visualize the load balancing happening between the two instances of the payment-processor.
 
 . From the *AWS terminal* deploy the simple load balancer app.
 +
@@ -613,7 +613,7 @@ oc apply -f https://raw.githubusercontent.com/rpscodes/patient_portal_load_obser
 
 . Give a few seconds for the deployment to complete.
 
-. Navigate to the link:https://loadbalancer-app-aws{openshift-host}[Load balancer app, window="_blank"] and click on start load test.
+. Navigate to the link:https://loadbalancer-app-aws.{aws-subdomain}[Load balancer app, window="_blank"] and click on start load test.
 +
 image::images/load_balancer_app_start_load_test.png[]
 
