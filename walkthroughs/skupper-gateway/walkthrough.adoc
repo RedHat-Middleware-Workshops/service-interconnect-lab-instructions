@@ -60,8 +60,8 @@ Click *Next* to proceed
 [type=taskResource]
 .OpenShift Links
 ****
-* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
-* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="aws-console"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="azure-console"]
 ****
 
 [type=taskResource]
@@ -95,7 +95,7 @@ image::images/ui-aws-arch.png[ui-aws-arch, role="integr8ly-img-responsive"]
 The following steps will showcase how you can connect the frontend to services(database and payment-processor) in the datacentre using Red Hat Service Interconnect. Note that none of these services are exposed to the public internet
 
 === Deployment overview: AWS cluster
-. Open the console of the  link:{openshift-host}/topology/ns/aws[OpenShift cluster on AWS, window="_blank"]
+. Open the console of the  link:{openshift-host}/topology/ns/aws[OpenShift cluster on AWS, window="aws-console"] and login with the below credentials
 +
 *username:* `{user-username}`
 +
@@ -152,15 +152,15 @@ c54976092427  quay.io/redhatintegration/patient-portal-payment-processor:devnati
 
 === Connecting the frontend deployed on OpenShift in AWS to the database and payment processor deployed in the data centre
 
-Building a Service network between the two environments OpenShift and RHEL datacentre (more precisely between namespace of the OpenShift cluster and the services running on the datcentre) takes several steps:
+Building a Service network between the two environments OpenShift and RHEL datacenter (more precisely between namespace of the OpenShift cluster and the services running on the datacenter) takes several steps:
 
 . Install Service Interconnect router in both environments by setting up the Service interconnect sites
 
-. Create a link configuration including a secure token in the openshift cluster and transfer it to the datacentre.
+. Create a link configuration including a secure token in the openshift cluster and transfer it to the datacenter.
 
-. Use the link yaml on the datacentre to create a link between the namespaces of openshift cluster and the services running in the datacentre.
+. Use the link yaml on the datacenter to create a link between the namespaces of openshift cluster and the services running in the datacenter.
 
-. Expose services of one environment on the other using the connectors and corresponding listeners. In this case, you will create connectors for the  database and payment-processor on the datacentre, and corresponding listeners on the openshift cluster. This way the frontend on the openshift cluster can connect to the  database and payment-processor listeners as if the services were locally deployed. 
+. Expose services of one environment on the other using the connectors and corresponding listeners. In this case, you will create connectors for the  database and payment-processor on the datacenter, and corresponding listeners on the openshift cluster. This way the frontend on the openshift cluster can connect to the  database and payment-processor listeners as if the services were locally deployed. 
 
 === Initialize Red Hat Service Interconnect in the AWS cluster
 
@@ -360,7 +360,7 @@ cat aws-rhel-link.yaml
 scp aws-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skupper/namespaces/default/input/resources/
 ----
 
-. Type 'yes' and 'Enter the password of the RHEL datacentre when prompted
+. Type 'yes' and 'Enter the password of the RHEL datacenter when prompted
 +
 [source,bash,subs="attributes+"]
 ----
@@ -424,7 +424,7 @@ image::images/payment_button.png[payment_button, role="integr8ly-img-responsive"
 +
 image::images/payment-success.png[payment-success, role="integr8ly-img-responsive"]
 
-. Navigate to the   https://skupper-network-observer-aws.{aws-subdomain}[network console, window="_blank"] to visualize the network.
+. Navigate to the   https://skupper-network-observer-aws.{aws-subdomain}[network console, window="network-observer"] to visualize the network.
 
 . Choose the Login with OpenShift option and Login using the below credentials
 +
@@ -454,8 +454,8 @@ Click **Next** to proceed to the next scenario.
 [type=taskResource]
 .OpenShift Links
 ****
-* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
-* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="aws-console"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="azure-console"]
 ****
 
 [type=taskResource]
@@ -484,7 +484,7 @@ image::images/duplicate_processor_arch.png[duplicate_processor_arch, role="integ
 
 
 === Deployment overview: Azure cluster
-. Open the  link:{azure-console}/topology/ns/azure[console of the OpenShift cluster on Azure, window="_blank"]
+. Open the  link:{azure-console}/topology/ns/azure[console of the OpenShift cluster on Azure, window="azure-console"] and login with the below credentials
 +
 *username:* `{user-username}`
 +
@@ -516,7 +516,7 @@ We have used the link resource in the previous example and the token in this exa
 
 === Initialize Red Hat Service Interconnect in the Azure cluster
 
-. Open the browser window pointing to the  link:{azure-console}/topology/ns/azure[OpenShift Console of the Azure OpenShift cluster, window="_blank"]. 
+. Open the browser window pointing to the  link:{azure-console}/topology/ns/azure[OpenShift Console of the Azure OpenShift cluster, window="azure-console"]. 
 
 . Login with username `{user-username}` and password `{aws-password}`
 
@@ -553,7 +553,7 @@ image::images/connector_wizard.png[]
 
 
 
-. Now go back to the  link:{openshift-host}/k8s/cluster/projects/aws/openshift-site-plugin[OpenShift cluster on AWS, window="_blank"] and generate a token , that the azure cluster can use to set up a virtual application network. Click on the Generate a token button.
+. Now go back to the  link:{openshift-host}/k8s/cluster/projects/aws/openshift-site-plugin[OpenShift cluster on AWS, window="aws-console"] and generate a token , that the azure cluster can use to set up a virtual application network. Click on the Generate a token button.
 +
 image::images/token_gen_azure.png[]
 +
@@ -576,7 +576,7 @@ image::images/token_redemption.png[]
 .. FileName: `aws-azure`
 .. Redemptions: `1`
 .. Valid for: `60` min
-.. Leave the rest of the values blank and click create
+.. Make sure you only copied the values into the text boxes from the previous step and not the units. Leave the rest of the values blank and click create
 +
 image::images/token_create_wizard.png[]
 
@@ -584,7 +584,7 @@ image::images/token_create_wizard.png[]
 +
 image::images/download_token.png[]
 
-. Go back to the link:{azure-console}/k8s/cluster/projects/azure/openshift-site-plugin[OpenShift cluster on Azure, window="_blank"] and click on the Links tab.
+. Go back to the link:{azure-console}/k8s/cluster/projects/azure/openshift-site-plugin[OpenShift cluster on Azure, window="azure-console"] and click on the Links tab.
 +
 image::images/link_azure_tab.png[]
 
@@ -613,7 +613,7 @@ oc apply -f https://raw.githubusercontent.com/rpscodes/patient_portal_load_obser
 
 . Give a few seconds for the deployment to complete.
 
-. Navigate to the link:https://loadbalancer-app-aws.{aws-subdomain}[Load balancer app, window="_blank"] and click on start load test.
+. Navigate to the link:https://loadbalancer-app-aws.{aws-subdomain}[Load balancer app, window="load-balancer"] and click on start load test.
 +
 image::images/load_balancer_app_start_load_test.png[]
 
@@ -711,8 +711,8 @@ Click **Next** to proceed to the next scenario.
 [type=taskResource]
 .OpenShift Links
 ****
-* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
-* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="aws-console"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="azure-console"]
 ****
 
 [type=taskResource]
@@ -866,8 +866,8 @@ Click *Next* to proceed
 [type=taskResource]
 .OpenShift Links
 ****
-* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="_blank"]
-* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="_blank"]
+* link:{openshift-host}/topology/ns/{aws-namespace}[AWS Developer Console, window="aws-console"]
+* link:{azure-console}/topology/ns/{azure-namespace}[Azure Developer Console, window="azure-console"]
 ****
 
 [type=taskResource]
