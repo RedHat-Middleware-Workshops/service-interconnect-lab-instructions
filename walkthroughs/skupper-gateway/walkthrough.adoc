@@ -335,9 +335,16 @@ image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img
 +
 image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
 
+. From the *OpenShift AWS Terminal*, run the following command to deploy the Service Interconnect Network Observer Console.
++
+[source,bash,role=copy]
+----
+oc apply -f https://raw.githubusercontent.com/RedHat-Middleware-Workshops/service-interconnect-lab-instructions/refs/heads/main/network_console_deploy.yaml -n aws
+----
 
+You will use this console to visualize the network later. Since it takes a few seconds to initialize, go ahead and deploy it now. While it is getting deployed, proceed to the next steps to save time.
 
-. Issue the following command
+. Issue the following command to generate the link configuration yaml
 +
 [source,bash,role=copy]
 ----
@@ -384,14 +391,7 @@ Platform: podman
 Definition is available at: /home/lab-user/.local/share/skupper/namespaces/default/input/resources
 ----  
 
-. From the *OpenShift AWS Terminal*, run the following command to deploy the Service Interconnect Network ObserverConsole.
-+
-[source,bash,role=copy]
-----
-oc apply -f https://raw.githubusercontent.com/RedHat-Middleware-Workshops/service-interconnect-lab-instructions/refs/heads/main/network_console_deploy.yaml -n aws
-----
 
-You will use this console to visualize the network later. Since it takes a few seconds to initialize, go ahead and deploy it now. While it is getting deployed, proceed to the next steps to save time.
 
 
 
@@ -608,7 +608,15 @@ image::images/azure_aws_rhel_network_observer.png[]
 
 Now we have two payment-processors one in the datacenter and the other in the Azure cluster. Service Interconnect by default provides HA for the payment-processor using these two instances as they are part of the same service network. If the payment-processor in the datacentre has a lot of concurrent requests, Service Interconnect automatically load balances request across the two instances. Let's test this out using a simple load balancer app that we will deploy on the AWS cluster. This app will help us visualize the load balancing happening between the two instances of the payment-processor.
 
-. From the *AWS terminal* deploy the simple load balancer app.
+. Navigate to the browser tab pointing to the OpenShift Web terminal on the *AWS cluster* 
++
+image::images/aws_terminal_started.png[aws_terminal_started, role="integr8ly-img-responsive"]
+
+.. **NOTE:** If you are logged out of the terminal for any reason. Click on the *Reconnect to terminal* button and and issue the `oc project aws` command to log back into the aws namespace
++
+image::images/reconnect_terminal.png[reconnect_terminal, role="integr8ly-img-responsive"]
+
+. From the *AWS terminal* deploy the simple load balancer app, which will help us visualize the load balancing happening between the two instances of the payment-processor.
 +
 [source,bash,role=copy]
 ----
