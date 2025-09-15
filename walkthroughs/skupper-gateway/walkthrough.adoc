@@ -385,7 +385,7 @@ scp aws-rhel-link.yaml lab-user@{rhel-hostname}:/home/lab-user/.local/share/skup
 + 
 [source,bash,role=copy]
 ----
-skupper system setup
+skupper system start
 ----
 
 . Wait for a few seconds, and you should see the following output.
